@@ -17,19 +17,17 @@ class TrabajadoresFixture extends TestFixture
      */
     // phpcs:disable
     public $fields = [
-        'id' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'dni' => ['type' => 'string', 'length' => 9, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
-        'nombres' => ['type' => 'string', 'length' => 60, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
-        'apellido_paterno' => ['type' => 'string', 'length' => 60, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
-        'apellido_materno' => ['type' => 'string', 'length' => 60, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
-        'grupo_ocupacional' => ['type' => 'string', 'length' => 90, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
+        'dni_medico' => ['type' => 'string', 'length' => 10, 'null' => false, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null],
+        'nombre_completo' => ['type' => 'string', 'length' => 50, 'null' => false, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null],
+        'cod_planilla' => ['type' => 'string', 'length' => 10, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null],
+        'created' => ['type' => 'datetime', 'length' => null, 'precision' => null, 'null' => false, 'default' => null, 'comment' => ''],
+        'modified' => ['type' => 'datetime', 'length' => null, 'precision' => null, 'null' => false, 'default' => null, 'comment' => ''],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-            'dni_UNIQUE' => ['type' => 'unique', 'columns' => ['dni'], 'length' => []],
+            'primary' => ['type' => 'primary', 'columns' => ['dni_medico'], 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
-            'collation' => 'utf8_general_ci'
+            'collation' => 'latin1_swedish_ci'
         ],
     ];
     // phpcs:enable
@@ -42,12 +40,11 @@ class TrabajadoresFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 1,
-                'dni' => 'Lorem i',
-                'nombres' => 'Lorem ipsum dolor sit amet',
-                'apellido_paterno' => 'Lorem ipsum dolor sit amet',
-                'apellido_materno' => 'Lorem ipsum dolor sit amet',
-                'grupo_ocupacional' => 'Lorem ipsum dolor sit amet',
+                'dni_medico' => '502af64f-3d26-48c0-bdd3-95e2f67b4d6f',
+                'nombre_completo' => 'Lorem ipsum dolor sit amet',
+                'cod_planilla' => 'Lorem ip',
+                'created' => '2024-07-21 23:01:07',
+                'modified' => '2024-07-21 23:01:07',
             ],
         ];
         parent::init();

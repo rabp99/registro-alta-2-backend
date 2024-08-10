@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -12,10 +13,11 @@ use Cake\ORM\Entity;
  * @property string $tipo_documento
  * @property string $nro_documento
  * @property string $trabajador
- * @property string|null $grupo_ocupacional
  * @property int $estado_id
+ * @property int $grupo_ocupacional_id
  *
  * @property \App\Model\Entity\Estado $estado
+ * @property \App\Model\Entity\GruposOcupacional $grupo_ocupacional
  */
 class Colaborador extends Entity
 {
@@ -29,10 +31,11 @@ class Colaborador extends Entity
      * @var array
      */
     protected $_accessible = [
-        'tipo_documento' => true,
-        'nro_documento' => true,
-        'trabajador' => true,
+        'dni_medico' => true,
+        'nombre_completo' => true,
+        'cod_planilla' => true,
         'grupo_ocupacional' => true,
+        'grupo_ocupacional_id' => true,
         'estado' => true,
     ];
 }

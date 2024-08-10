@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -10,7 +11,7 @@ use Cake\Validation\Validator;
 
 /**
  * Programaciones Model
- *
+ * @property \App\Model\Table\ColaboradoresTable $Colaboradores
  * @method \App\Model\Entity\Programacione newEmptyEntity()
  * @method \App\Model\Entity\Programacione newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Programacione[] newEntities(array $data, array $options = [])
@@ -33,18 +34,23 @@ class ProgramacionesTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config): void {
+    public function initialize(array $config): void
+    {
         parent::initialize($config);
 
         $this->setTable('programaciones');
         $this->setDisplayField('centro');
         $this->setPrimaryKey(['centro', 'dni_medico', 'fecha_programacion', 'turno']);
         $this->setEntityClass('Programacion');
-        
+
         $this->belongsTo('Estados')
             ->setForeignKey('estado_id')
             ->setJoinType('INNER');
-        
+
+        $this->belongsTo('Colaboradores')
+            ->setForeignKey('dni_medico')
+            ->setJoinType('INNER');
+
         $this->hasMany('Solicitudes')
             ->setForeignKey(['programacion_centro', 'programacion_dni_medico', 'programacion_fecha_programacion', 'programacion_turno']);
     }
@@ -55,7 +61,8 @@ class ProgramacionesTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator): Validator {
+    public function validationDefault(Validator $validator): Validator
+    {
         $validator
             ->scalar('centro')
             ->maxLength('centro', 10)

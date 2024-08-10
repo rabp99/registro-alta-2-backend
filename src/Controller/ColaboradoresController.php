@@ -1,7 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
+
+use Cake\Http\Exception\BadRequestException;
 
 /**
  * Colaboradores Controller
@@ -11,30 +14,32 @@ namespace App\Controller;
  */
 class ColaboradoresController extends AppController
 {
-    public function beforeFilter(\Cake\Event\EventInterface $event) {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
         parent::beforeFilter($event);
 
         $this->Authentication->allowUnauthenticated(['findByDni', 'getEnabled']);
     }
-    
+
     /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function index() {
+    public function index()
+    {
         $this->getRequest()->allowMethod("GET");
-        $nroDocumento = $this->request->getQuery('nro_documento');
+        $dniMedico = $this->request->getQuery('dni_medico');
         $itemsPerPage = $this->request->getQuery('itemsPerPage');
-           
+
         $query = $this->Colaboradores->find()
-            ->contain(['Estados'])
-            ->order(['Colaboradores.id']);
-        
-        if ($nroDocumento) {
-            $query->where(['Colaboradores.nro_documento LIKE' => "%$nroDocumento%"]);
+            ->contain(['Estados', 'GruposOcupacionales'])
+            ->order(['Colaboradores.dni_medico']);
+
+        if ($dniMedico) {
+            $query->where(['Colaboradores.dni_medico LIKE' => "%$dniMedico%"]);
         }
-        
+
         $count = $query->count();
         if (!$itemsPerPage) {
             $itemsPerPage = $count;
@@ -47,7 +52,7 @@ class ColaboradoresController extends AppController
             'totalItems' => $paginate['count'],
             'itemsPerPage' =>  $paginate['perPage']
         ];
-        
+
         $this->set(compact('colaboradores', 'pagination', 'count'));
         $this->viewBuilder()->setOption('serialize', true);
     }
@@ -57,7 +62,8 @@ class ColaboradoresController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function getEnabled() {
+    public function getEnabled()
+    {
         $this->getRequest()->allowMethod("GET");
         $colaboradores = $this->Colaboradores->find()
             ->where(['Colaboradores.estado_id' => 1]);
@@ -65,7 +71,7 @@ class ColaboradoresController extends AppController
         $this->set(compact('colaboradores'));
         $this->viewBuilder()->setOption('serialize', true);
     }
-    
+
     /**
      * View method
      *
@@ -87,13 +93,13 @@ class ColaboradoresController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add() {
+    public function add()
+    {
         $this->getRequest()->allowMethod("POST");
         $colaborador = $this->Colaboradores->newEntity($this->getRequest()->getData());
-        $colaborador->tipo_documento = "DNI";
         $colaborador->estado_id = 1;
         $errors = "";
-                
+
         if ($this->Colaboradores->save($colaborador)) {
             $message = 'El colaborador fue registrado correctamente';
         } else {
@@ -101,7 +107,7 @@ class ColaboradoresController extends AppController
             $this->setResponse($this->getResponse()->withStatus(500));
             $errors = $colaborador->getErrors();
         }
-        
+
         $this->set(compact('colaborador', "message", "errors"));
         $this->viewBuilder()->setOption('serialize', true);
     }
@@ -150,7 +156,7 @@ class ColaboradoresController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    
+
     /**
      * Find By DNI method
      *
@@ -158,7 +164,8 @@ class ColaboradoresController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to findByDni.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function findByDni() {
+    public function findByDni()
+    {
         $this->getRequest()->allowMethod("GET");
         $dni = $this->getRequest()->getParam('dni');
 
@@ -167,8 +174,42 @@ class ColaboradoresController extends AppController
                 'Colaboradores.nro_documento' => $dni,
                 'Colaboradores.estado_id <>' => 2,
             ])->first();
-        
+
         $this->set(compact('colaborador'));
+        $this->viewBuilder()->setOption('serialize', true);
+    }
+
+    public function checkColaboradorProgramadoHoy()
+    {
+        $dni_medico = $this->getRequest()->getParam('dni_medico');
+        try {
+            $colaborador = $this->Colaboradores->get($dni_medico, ["contain" => "GruposOcupacionales"]);
+        } catch (\Throwable $th) {
+            throw new BadRequestException(__('No se encontró un colaborador con este número de documento.'));
+        }
+
+        $programacionesCount = $this->Colaboradores->Programaciones->find()->where([
+            'Programaciones.dni_medico' => $dni_medico,
+            'Programaciones.fecha_programacion' => date('Y-m-d'),
+            'Programaciones.estado_id' => 1
+        ])->count();
+
+        if (!$programacionesCount) {
+            throw new BadRequestException(__('No se encontraron programaciones disponibles.'));
+        }
+
+        $turnos = [];
+        if ($programacionesCount === 1) {
+            $turnos = $this->Colaboradores->Programaciones->find()
+                ->select(['turno'])
+                ->where([
+                    'Programaciones.dni_medico' => $dni_medico,
+                    'Programaciones.fecha_programacion' => date('Y-m-d'),
+                    'Programaciones.estado_id' => 1
+                ])->first();
+        }
+
+        $this->set(compact('colaborador', 'turnos'));
         $this->viewBuilder()->setOption('serialize', true);
     }
 }

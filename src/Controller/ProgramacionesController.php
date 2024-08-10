@@ -12,6 +12,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use Cake\Http\CallbackStream;
 use Cake\Log\Log;
+use Cake\Http\Exception\BadRequestException;
+
 
 /**
  * Programaciones Controller
@@ -34,93 +36,112 @@ class ProgramacionesController extends AppController
         $this->loadComponent('Random');
     }
 
-    /**
-     * Load method
-     *
-     * @return \Cake\Http\Response|null|void Renders load
-     */
     public function load()
     {
         $this->request->allowMethod('post');
+
         /** @var \Laminas\Diactoros\UploadedFile $file **/
         $file = $this->getRequest()->getData('file');
-        $pathDst = TMP . DS;
-        $ext = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
 
-        $filename = $pathDst . 'programaciones-' . $this->Random->randomString() . '.' . $ext;
+        if (!$file) {
+            throw new BadRequestException(__('No se ha subido ningún archivo.'));
+        }
 
         try {
-            $file->moveTo($filename);
-            // load the CSV document from a stream
-            $csv = Reader::createFromPath($filename, 'r');
+            $stream = $file->getStream()->detach();
+
+            $csv = Reader::createFromStream($stream);
             $csv->setDelimiter('|');
             $csv->setHeaderOffset(0);
 
-            $countBefore = $this->Programaciones->find()->count();
-            $programaciones = [];
-            foreach ($csv as $record) {
-                $fecha = FrozenDate::createFromFormat('d/m/Y', $record["FECHA_PROGRAMACION"]);
-                $programacionExists = $this->Programaciones->find()
-                    ->where([
-                        'centro' => $record["CENTRO"],
-                        'dni_medico' => $record["DNI_MEDICO"],
-                        'fecha_programacion' => $fecha,
-                        'turno' => $record["TURNO"],
-                    ])->first() !== null;
-                if (!$programacionExists) {
-                    $programacion = $this->Programaciones->newEmptyEntity();
-                    if (
-                        $record['ESTADO_PROGRAMACION'] === 'APROBADA' &&
-                        $record['SUBACTIVIDAD'] !== 'LICENCIA' &&
-                        $record['SUBACTIVIDAD'] !== 'TELECONSULTAS' &&
-                        $record['SUBACTIVIDAD'] !== 'TELEMONITOREO' &&
-                        $record['SUBACTIVIDAD'] !== 'TELEORIENTACION' &&
-                        $record['SUBACTIVIDAD'] !== 'VACACIONES'
-                    ) {
-                        $programacion->centro = $record["CENTRO"];
-                        $programacion->periodo = $record["PERIODO"];
-                        $programacion->area = $record["AREA"];
-                        $programacion->servicio = $record["SERVICIO"];
-                        $programacion->actividad = $record["ACTIVIDAD"];
-                        $programacion->subactividad = $record["SUBACTIVIDAD"];
-                        $programacion->consultorio = $record["CONSULTORIO"];
-                        $programacion->ubicacionconsult = $record["UBICACIONCONSULT"];
+            $requiredFields = [
+                "FECHA_PROGRAMACION", "ESTADO_PROGRAMACION", "SUBACTIVIDAD", "CENTRO", "PERIODO", "AREA",
+                "SERVICIO", "ACTIVIDAD", "SUBACTIVIDAD", "CONSULTORIO", "UBICACIONCONSULT",
+                "DNI_MEDICO", "PROFESIONAL", "GRUPO_OCUPACIONAL", "TIP_PROGRAMACION", "HOR_INICIO",
+                "HOR_FIN", "ESTADO_PROGRAMACION", "MOTIVO_SUSPENSION", "COD_PLANILLA", "TURNO",
+                "CONDTRABAJADOR", "PERTENECE_OTRO_CAS"
+            ];
 
-                        // $programacion->dni_medico = $record['DNI_MEDICO'], 8, '0', STR_PAD_LEFT);
-                        $programacion->dni_medico = $record['DNI_MEDICO'];
-                        $programacion->profesional = $record["PROFESIONAL"];
-                        $programacion->grupo_ocupacional = $record["GRUPO_OCUPACIONAL"];
-                        $programacion->tip_programacion = $record["TIP_PROGRAMACION"];
 
-                        $fecha = FrozenDate::createFromFormat('d/m/Y', $record["FECHA_PROGRAMACION"]);
-                        $programacion->fecha_programacion = $fecha;
-                        $programacion->hor_inicio = $record["HOR_INICIO"];
-                        $programacion->hor_fin = $record["HOR_FIN"];
-                        $programacion->estado_programacion = $record["ESTADO_PROGRAMACION"];
-                        $programacion->motivo_suspension = $record["MOTIVO_SUSPENSION"];
-                        $programacion->cod_planilla = $record["COD_PLANILLA"];
-                        $programacion->turno = $record["TURNO"];
-                        $programacion->condtrabajador = $record["CONDTRABAJADOR"];
-                        $programacion->pertenece_otro_cas = $record["PERTENECE_OTRO_CAS"];
-                        $programacion->flag_interno = 1;
-                        $programacion->estado_id = 1;
-
-                        $programaciones[] = $programacion;
-                    }
+            $firstRecord = $csv->fetchOne();
+            foreach ($requiredFields as $field) {
+                if (!array_key_exists($field, $firstRecord)) {
+                    throw new BadRequestException(__('El archivo CSV no cumple con el formato requerido. Campo faltante: ') . $field);
                 }
             }
-            $this->Programaciones->saveManyOrFail($programaciones);
-            $countAfter = $this->Programaciones->find()->count();
 
+            $newProgramacionesCount = 0;
+            foreach ($csv as $record) {
+                try {
+                    $fecha = FrozenDate::createFromFormat('d/m/Y', $record["FECHA_PROGRAMACION"]);
+
+                    if (
+                        $record['ESTADO_PROGRAMACION'] === 'APROBADA' &&
+                        !in_array($record['SUBACTIVIDAD'], ['LICENCIA', 'TELECONSULTAS', 'TELEMONITOREO', 'TELEORIENTACION', 'VACACIONES'])
+                    ) {
+                        $colaborador = $this->Programaciones->Colaboradores->findOrCreate(
+                            [
+                                "Colaboradores.dni_medico" => $record["DNI_MEDICO"] ?? null,
+                            ],
+                            function ($colaborador) use ($record) {
+                                $colaborador->dni_medico = $record['DNI_MEDICO'];
+                                $colaborador->nombre_completo = $record['PROFESIONAL'];
+                                $grupo_ocupacional = $this->Programaciones->Colaboradores->GruposOcupacionales->findOrCreate([
+                                    "GruposOcupacionales.descripcion" => $record["GRUPO_OCUPACIONAL"]
+                                ], function ($grupo_ocupacional) use ($record) {
+                                    $grupo_ocupacional->descripcion = $record["GRUPO_OCUPACIONAL"];
+                                    $grupo_ocupacional->flag_show = true;
+                                });
+                                $colaborador->grupo_ocupacional_id = $grupo_ocupacional->id;
+                                $colaborador->cod_planilla = $record['COD_PLANILLA'];
+                                $colaborador->estado_id = 1;
+                            }
+                        );
+                        $programacion = $this->Programaciones->newEmptyEntity();
+                        $programacion->centro = $record["CENTRO"] ?? null;
+                        $programacion->dni_medico = $colaborador->dni_medico;
+                        $programacion->fecha_programacion = $fecha ?? null;
+                        $programacion->turno = $record["TURNO"] ?? null;
+
+                        $programacion->periodo = $record["PERIODO"] ?? null;
+                        $programacion->area = $record["AREA"] ?? null;
+                        $programacion->servicio = $record["SERVICIO"] ?? null;
+                        $programacion->actividad = $record["ACTIVIDAD"] ?? null;
+                        $programacion->subactividad = $record["SUBACTIVIDAD"] ?? null;
+                        $programacion->consultorio = $record["CONSULTORIO"] ?? null;
+                        $programacion->ubicacionconsult = $record["UBICACIONCONSULT"] ?? null;
+
+                        // $programacion->profesional = $record["PROFESIONAL"] ?? null;
+                        // $programacion->grupo_ocupacional = $record["GRUPO_OCUPACIONAL"] ?? null;
+                        $programacion->tip_programacion = $record["TIP_PROGRAMACION"] ?? null;
+
+                        $programacion->hor_inicio = $record["HOR_INICIO"] ?? null;
+                        $programacion->hor_fin = $record["HOR_FIN"] ?? null;
+                        $programacion->estado_programacion = $record["ESTADO_PROGRAMACION"] ?? null;
+                        // $programacion->motivo_suspension = $record["MOTIVO_SUSPENSION"] ?? null;
+                        // $programacion->cod_planilla = $record["COD_PLANILLA"] ?? null;
+                        $programacion->condtrabajador = $record["CONDTRABAJADOR"] ?? null;
+                        $programacion->pertenece_otro_cas = $record["PERTENECE_OTRO_CAS"] ?? null;
+                        $programacion->flag_interno = 1 ?? null;
+                        $programacion->estado_id = 1 ?? null;
+
+
+                        if ($this->Programaciones->save($programacion, ["checkExisting" => false])) {
+                            $newProgramacionesCount++;
+                        }
+                    }
+                } catch (\Throwable $th) {
+                }
+            }
+
+            $message = 'Las programaciones fueron cargadas correctamente, ' . $newProgramacionesCount . ' programaciones cargadas';
+            Log::info("Un total de $newProgramacionesCount de Programaciones cargadas el " . date('d/m/Y H:i:s'), 'info');
             $this->setResponse($this->response->withStatus(200));
-            $count = $countAfter - $countBefore;
-            $message = 'Las programaciones fueron cargadas correctamente, ' . $count . ' programaciones cargadas';
-            Log::info("Un total de $count de Programaciones cargadas el " . date('d/m/Y H:i:s'), 'info');
-        } catch (UploadedFileErrorException $ex) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = "Las programaciones no fueron cargadas correctamente";
+        } catch (\Throwable $th) {
+            throw new BadRequestException(__('Error al procesar el archivo CSV: ' . $th->getMessage()));
+            Log::error(__('Error al procesar el archivo CSV: ' . $th->getMessage() . date('d/m/Y H:i:s')));
         } finally {
-            $this->set(compact("message", "filename"));
+            $this->set(compact("message"));
             $this->viewBuilder()->setOption('serialize', true);
         }
     }
@@ -197,6 +218,7 @@ class ProgramacionesController extends AppController
         }
     }
 
+    /*
     public function findAvailables()
     {
         $dni_medico = $this->getRequest()->getParam('dni_medico');
@@ -204,25 +226,12 @@ class ProgramacionesController extends AppController
             'Programaciones.dni_medico' => $dni_medico,
             'Programaciones.fecha_programacion' => date('Y-m-d'),
             'Programaciones.estado_id' => 1
-        ])->toArray();
+        ]);
 
-        $message = '';
-        if (sizeof($programaciones) === 0) {
-            $message = 'No se encontraron programaciones disponibles';
-            /*
-            $programaciones = $this->Programaciones->find()->where([
-                'Programaciones.dni_medico' => $dni_medico,
-                'Programaciones.fecha_programacion' => date('Y-m-d'),
-                'Programaciones.estado_id IN' => 
-            ])->toArray();
-            */
-        } else {
-            $message = 'Se encontraron programaciones';
-        }
-
-        $this->set(compact('programaciones', 'message'));
+        $this->set(compact('programaciones'));
         $this->viewBuilder()->setOption('serialize', true);
     }
+*/
 
     public function findToTrabajador()
     {

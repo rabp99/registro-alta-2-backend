@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\TrabajadoresTable;
+use App\Model\Table\WorkerOccupationalGroupsTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\TrabajadoresTable Test Case
+ * App\Model\Table\WorkerOccupationalGroupsTable Test Case
  */
-class TrabajadoresTableTest extends TestCase
+class WorkerOccupationalGroupsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\TrabajadoresTable
+     * @var \App\Model\Table\WorkerOccupationalGroupsTable
      */
-    protected $Trabajadores;
+    protected $WorkerOccupationalGroups;
 
     /**
      * Fixtures
@@ -24,7 +24,8 @@ class TrabajadoresTableTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'app.Trabajadores',
+        'app.WorkerOccupationalGroups',
+        'app.Workers',
     ];
 
     /**
@@ -35,8 +36,8 @@ class TrabajadoresTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Trabajadores') ? [] : ['className' => TrabajadoresTable::class];
-        $this->Trabajadores = $this->getTableLocator()->get('Trabajadores', $config);
+        $config = $this->getTableLocator()->exists('WorkerOccupationalGroups') ? [] : ['className' => WorkerOccupationalGroupsTable::class];
+        $this->WorkerOccupationalGroups = $this->getTableLocator()->get('WorkerOccupationalGroups', $config);
     }
 
     /**
@@ -46,7 +47,7 @@ class TrabajadoresTableTest extends TestCase
      */
     public function tearDown(): void
     {
-        unset($this->Trabajadores);
+        unset($this->WorkerOccupationalGroups);
 
         parent::tearDown();
     }

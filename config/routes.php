@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Routes configuration.
  *
@@ -41,6 +42,7 @@ use Cake\Routing\RouteBuilder;
  * inconsistently cased URLs when used with `:plugin`, `:controller` and
  * `:action` markers.
  */
+
 /** @var \Cake\Routing\RouteBuilder $routes */
 $routes->setRouteClass(DashedRoute::class);
 
@@ -332,6 +334,10 @@ $routes->scope('/api', function (RouteBuilder $builder) {
             'get_colaboradores' => [
                 'action' => 'getColaboradores',
                 'method' => 'GET'
+            ],
+            'check-colaborador-programado-hoy/:dni_medico' => [
+                'action' => 'checkColaboradorProgramadoHoy',
+                'method' => 'GET'
             ]
         ]
     ]);
@@ -368,4 +374,35 @@ $routes->scope('/api', function (RouteBuilder $builder) {
         ]
     ]);
     $builder->resources('entregas');
+
+
+
+    $builder->resources('workers');
+
+    $builder->resources('worker-occupational-groups', [
+        'map' => [
+            'get-list' => [
+                'action' => 'getList',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
+
+    $builder->resources('worker-conditions', [
+        'map' => [
+            'get-list' => [
+                'action' => 'getList',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
+
+    $builder->resources('worker-medical-specialities', [
+        'map' => [
+            'get-list' => [
+                'action' => 'getList',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
 });

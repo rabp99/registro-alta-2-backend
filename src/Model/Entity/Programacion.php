@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -22,14 +23,13 @@ use Cake\ORM\Entity;
  * @property string|null $hor_inicio
  * @property string|null $hor_fin
  * @property string|null $estado_programacion
- * @property string|null $motivo_suspension
- * @property string|null $cod_planilla
  * @property string $turno
  * @property string|null $condtrabajador
  * @property string|null $pertenece_otro_cas
  * @property \Cake\I18n\FrozenTime $fecha_hora_entrada
  * @property \Cake\I18n\FrozenTime $fecha_hora_salida
  * @property Estado $estado
+ * @property Trabajador $trabajador
  */
 class Programacion extends Entity
 {
@@ -55,8 +55,6 @@ class Programacion extends Entity
         'hor_inicio' => true,
         'hor_fin' => true,
         'estado_programacion' => true,
-        'motivo_suspension' => true,
-        'cod_planilla' => true,
         'condtrabajador' => true,
         'pertenece_otro_cas' => true,
         'fecha_hora_entrada' => true,
@@ -64,5 +62,7 @@ class Programacion extends Entity
         'flag_interno' => true,
         'estado' => true,
         'estado_id' => true,
+        'trabajador' => true,
+        'dni_medico' => true,
     ];
 }
