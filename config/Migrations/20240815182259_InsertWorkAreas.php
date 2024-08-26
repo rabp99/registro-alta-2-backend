@@ -61,7 +61,7 @@ class InsertWorkAreas extends AbstractMigration
         $workplacesTable = TableRegistry::getTableLocator()->get('workplaces');
 
         $workplace = $workplacesTable->find()
-            ->where(["Workplaces.description" => $data])
+            ->where(["workplaces.description" => $data])
             ->first();
 
         return $workplace->id;
