@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -59,7 +60,8 @@ class WorkplacesTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->integer('description')
+            ->scalar('description')
+            ->maxLength('description', 40)
             ->requirePresence('description', 'create')
             ->notEmptyString('description');
 

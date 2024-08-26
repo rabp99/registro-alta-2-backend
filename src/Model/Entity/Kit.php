@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -7,16 +6,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Workplace Entity
+ * Kit Entity
  *
  * @property int $id
- * @property int $description
- * @property string $type
+ * @property string $description
  * @property bool $status
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
+ *
+ * @property \App\Model\Entity\Product[] $products
+ * @property \App\Model\Entity\WorkArea[] $work_areas
  */
-class Workplace extends Entity
+class Kit extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -29,10 +30,10 @@ class Workplace extends Entity
      */
     protected $_accessible = [
         'description' => true,
-        'type_asistencial' => true,
-        'type_administrativo' => true,
         'status' => true,
         'created' => true,
         'modified' => true,
+        'products' => true,
+        'work_areas' => true,
     ];
 }

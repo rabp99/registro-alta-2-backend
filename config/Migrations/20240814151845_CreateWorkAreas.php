@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class CreateWorkplaces extends AbstractMigration
+class CreateWorkAreas extends AbstractMigration
 {
     /**
      * Change Method.
@@ -15,22 +15,30 @@ class CreateWorkplaces extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('workplaces')
+        $this->table('work_areas')
             ->addColumn('description', 'string', [
                 'default' => null,
-                'limit' => 40,
+                'limit' => 150,
+                'null' => false,
+            ])
+            ->addColumn('workplace_id', 'integer', [
+                'default' => null,
+                'limit' => null,
                 'null' => false,
             ])
             ->addColumn('type_asistencial', 'boolean', [
                 'default' => null,
+                'limit' => null,
                 'null' => false,
             ])
             ->addColumn('type_administrativo', 'boolean', [
                 'default' => null,
+                'limit' => null,
                 'null' => false,
             ])
             ->addColumn('status', 'boolean', [
                 'default' => null,
+                'limit' => null,
                 'null' => false,
             ])
             ->addColumn('created', 'datetime', [
@@ -40,7 +48,20 @@ class CreateWorkplaces extends AbstractMigration
             ->addColumn('modified', 'datetime', [
                 'default' => null,
                 'null' => false,
-            ]);
-        $table->create();
+            ])
+            ->addIndex(
+                [
+                    'workplace_id',
+                ]
+            )
+            ->addForeignKey(
+                'workplace_id',
+                'workplaces',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )->create();
     }
 }

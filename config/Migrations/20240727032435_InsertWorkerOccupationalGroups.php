@@ -7,7 +7,7 @@ use Migrations\AbstractMigration;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 
-class InsertWorkersOccupationalGroups extends AbstractMigration
+class InsertWorkerOccupationalGroups extends AbstractMigration
 {
     /**
      * Up Method.

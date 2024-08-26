@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 use Cake\I18n\FrozenTime;
+use Cake\ORM\TableRegistry;
 
-class InsertWorkplaces extends AbstractMigration
+class InsertWorkAreas extends AbstractMigration
 {
     /**
      * Up Method.
@@ -14,19 +15,23 @@ class InsertWorkplaces extends AbstractMigration
      * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
      * @return void
      */
+
     public function up()
     {
         $data = [];
-        $file = fopen('config/data/workplaces.csv', 'r');
+        $file = fopen('config/data/work_areas.csv', 'r');
 
         // Skip the header row if your CSV file has one
         fgetcsv($file);
 
-        while (($row = fgetcsv($file, null, ',')) !== FALSE) {
+        while (($row = fgetcsv($file, null, ';')) !== FALSE) {
+            $workplaceId = $this->getWorkplaceId($row[1]);
+
             $data[] = [
                 'description' => $row[0],
-                'type_asistencial' => $row[1],
-                'type_administrativo' => $row[2],
+                'workplace_id' => $workplaceId,
+                'type_asistencial' => $row[2],
+                'type_administrativo' => $row[3],
                 'status' => true,
                 'created' => FrozenTime::now(),
                 'modified' => FrozenTime::now(),
@@ -35,7 +40,7 @@ class InsertWorkplaces extends AbstractMigration
 
         fclose($file);
 
-        $table = $this->table('workplaces');
+        $table = $this->table('work_areas');
         $table->insert($data)->saveData();
     }
 
@@ -48,6 +53,17 @@ class InsertWorkplaces extends AbstractMigration
      */
     public function down()
     {
-        $this->execute('TRUNCATE TABLE workplaces');
+        $this->execute('TRUNCATE TABLE work_areas');
+    }
+
+    public function getWorkplaceId($data)
+    {
+        $workplacesTable = TableRegistry::getTableLocator()->get('workplaces');
+
+        $workplace = $workplacesTable->find()
+            ->where(["Workplaces.description" => $data])
+            ->first();
+
+        return $workplace->id;
     }
 }

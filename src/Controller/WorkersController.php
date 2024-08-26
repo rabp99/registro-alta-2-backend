@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Http\Exception\NotFoundException;
+use Exception;
+use PhpParser\Node\Expr\Throw_;
+use Throwable;
+
 /**
  * Workers Controller
  *
@@ -12,6 +17,13 @@ namespace App\Controller;
  */
 class WorkersController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Authentication->allowUnauthenticated(['findByDocument']);
+    }
+
     /**
      * Index method
      *
@@ -134,5 +146,28 @@ class WorkersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Find by Document method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function findByDocument()
+    {
+        $this->getRequest()->allowMethod("GET");
+        $this->viewBuilder()->setOption('serialize', true);
+
+        $documentType = $this->getRequest()->getParam("document_type");
+        $documentNumber = $this->getRequest()->getParam("document_number");
+
+        try {
+            $worker = $this->Workers->get([$documentType, $documentNumber], [
+                "contain" => ["WorkerOccupationalGroups", "WorkerMedicalSpecialities"]
+            ]);
+            $this->set(compact('worker'));
+        } catch (Exception $ex) {
+            throw new NotFoundException("Trabajador no encontrado");
+        }
     }
 }

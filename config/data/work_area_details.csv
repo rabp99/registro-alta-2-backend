@@ -1,0 +1,49 @@
+﻿description;work_area;workplace
+No interactúa con pacientes;OFICINA ADMINISTRATIVA;CONSULTA EXTERNA
+Examen físico y entrevista al paciente;CONSULTORIO GENERAL;CONSULTA EXTERNA
+Procedimientos con manejo de fluidos o producción de aerosoles;CONSULTORIO DE PROCEDIMIENTOS;CONSULTA EXTERNA
+Examen físico, entrevista al paciente y posibilidad de manejo de fluidos;CONSULTORIO NEUMOLOGÍA;CONSULTA EXTERNA
+Examen físico y procedimiento ;CONSULTORIO ODONTOLOGÍA;CONSULTA EXTERNA
+Técnico de Enfermería;CONSULTORIO ODONTOLOGÍA;CONSULTA EXTERNA
+Recolección de muestra de esputo MDR;CONSULTORIO DE TBC;CONSULTA EXTERNA
+Interactúa con personal;PERSONAL DE ARCHIVO;CONSULTA EXTERNA
+Sala de Rehabilitación;MEDICINA FÍSICA Y REHABILITACIÓN;CONSULTA EXTERNA
+Manipulación;HEMODIÁLISIS, DIÁLISIS PERITONEAL;CONSULTA EXTERNA
+Interactúa con pacientes;ADMISIÓN;EMERGENCIA
+Entrevista al paciente;TRIAJE;EMERGENCIA
+Examen físico y manejo de fluidos;SALA DE OBSERVACIÓN;EMERGENCIA
+Examen físico y manejo de fluidos;UNIDAD DE REANIMACIÓN Y SHOCK TRAUMA;EMERGENCIA
+Procedimientos menores;TÓPICO;EMERGENCIA
+En procedimientos invasivos, adicionar uso de gorro quirúrgico.;PROCEDIMIENTOS;EMERGENCIA
+Examen físico, entrevista al paciente y posibilidad de procedimiento;AISLAMIENTO;EMERGENCIA
+Examen físico y manejo de fluidos;VISITA MÉDICO/ENFERMERA;HOSPITALIZACIÓN
+En procedimientos invasivos, adicionar uso de gorro quirúrgico.;PROCEDIMIENTOS;HOSPITALIZACIÓN
+Examen físico, entrevista al paciente y posibilidad de procedimiento;AISLAMIENTO;HOSPITALIZACIÓN
+Cirugías;QUIRÓFANOS;CENTRO QUIRÚRGICO
+Examen físico ;SALA DE DILATACIÓN;CENTRO OBSTÉTRICO
+Zona Negra: Área administrativa;ZONA NEGRA: ÁREA ADMINISTRATIVA;UNIDAD DE CUIDADOS INTENSIVOS
+Examen físico y producción de aerosoles;ZONA BLANCA: ÁREA ASISTENCIAL;UNIDAD DE CUIDADOS INTENSIVOS
+Delantal y collarín plomado(*) Radiología intervencionista, mandilón con falda emplomados(**), se agregan además collarín cervical y protector gonadal plomados;RAYOS X PORTÁTIL Y SALAS;DIAGNÓSTICO POR MÁGENES
+El paciente debe llevar mascarilla quirúrgica (si tiene síntomas respiratorios);ECOGRAFÍA;DIAGNÓSTICO POR MÁGENES
+El paciente debe llevar mascarilla quirúrgica (si tiene síntomas respiratorios);TOMOGRAFÍA COMPUTARIZADA;DIAGNÓSTICO POR MÁGENES
+El paciente debe llevar mascarilla quirúrgica (si tiene síntomas respiratorios);RESONANCIA MAGNÉTICA;DIAGNÓSTICO POR MÁGENES
+Procedimiento;TOMA DE MUESTRA;PATOLOGÍA CLÍNICA
+Muestras biológicas fuera de cabina de seguridad;MANEJO DE MUESTRAS;PATOLOGÍA CLÍNICA
+Muestras biológicas en cabina de seguridad;MANEJO DE MUESTRAS;PATOLOGÍA CLÍNICA
+Muestras biológicas en sistemas automatizados;MANEJO DE MUESTRAS;PATOLOGÍA CLÍNICA
+Muestras biológicas fuera de cabina de seguridad;MANEJO DE MUESTRAS;ANATOMÍA PATOLÓGICA
+Muestras biológicas en cabina de seguridad;MANEJO DE MUESTRAS;ANATOMÍA PATOLÓGICA
+Muestras biológicas en sistemas automatizados;MANEJO DE MUESTRAS;ANATOMÍA PATOLÓGICA
+Manipulación de cadaver sin riesgo;MORTUORIO;ANATOMÍA PATOLÓGICA
+Manipulación de cadáver CON riesgo de generar aerosoles;MORTUORIO;ANATOMÍA PATOLÓGICA
+Extracción y procesamiento;SALA DE PROCEDIMIENTO;BANCO DE SANGRE
+Lavado de material;ÁREA ROJA;CENTRAL DE ESTERILIZACIÓN
+Manipulación;ÁREA AZUL;CENTRAL DE ESTERILIZACIÓN
+Separación y ordenamiento;ÁREA VERDE;CENTRAL DE ESTERILIZACIÓN
+Dispensación de medicamentos;FARMACIA CLÍNICA;FARMACIA
+Preparación de citotóxicos;FARMACOTECNIA;FARMACIA
+Preparación y dispensación de alimentos;NUTRICIÓN Y DIETÉTICA;NUTRICIÓN Y DIETÉTICA
+Uso de fuentes radioactivas;PROCEDIMIENTO;MEDICINA NUCLEAR
+Uso de radiación ionizante;PROCEDIMIENTO;RADIOTERAPIA
+(*) En caso de realizar procedimientos con aerosoles;TRANSPORTE ASISTIDO DE PACIENTES;AMBULANCIA
+Chofer Asistencial;TRANSPORTE ASISTIDO DE PACIENTES;AMBULANCIA

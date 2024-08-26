@@ -377,7 +377,14 @@ $routes->scope('/api', function (RouteBuilder $builder) {
 
 
 
-    $builder->resources('workers');
+    $builder->resources('workers', [
+        'map' => [
+            'find-by-document/:document_type/:document_number' => [
+                'action' => 'findByDocument',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
 
     $builder->resources('worker-occupational-groups', [
         'map' => [
@@ -401,6 +408,51 @@ $routes->scope('/api', function (RouteBuilder $builder) {
         'map' => [
             'get-list' => [
                 'action' => 'getList',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
+
+    $builder->resources('workplaces', [
+        'map' => [
+            'get-list-by-worker-type/:worker_type' => [
+                'action' => 'getListByWorkerType',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
+
+    $builder->resources('work-areas', [
+        'map' => [
+            'get-list-by-workplace-and-worker-type/:workplace_id/:worker_type' => [
+                'action' => 'getListByWorkplaceAndWorkerType',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
+
+    $builder->resources('work-area-details', [
+        'map' => [
+            'get-by-work-area/:worker_area_id' => [
+                'action' => 'getByWorkArea',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
+
+    $builder->resources('kits-work-area-details', [
+        'map' => [
+            'get-kits-by-work-area-detail/:work_area_detail_id' => [
+                'action' => 'getKitsByWorkAreaDetail',
+                'method' => 'GET'
+            ]
+        ]
+    ]);
+
+    $builder->resources('product-requests', [
+        'map' => [
+            'get-active-by-worker/:document_type/:document_number' => [
+                'action' => 'getActiveByWorker',
                 'method' => 'GET'
             ]
         ]

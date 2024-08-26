@@ -1,0 +1,48 @@
+﻿kit;work_area_detail;work_area;workplace;amount
+KIT N° 02;Examen físico y entrevista al paciente;CONSULTORIO GENERAL;CONSULTA EXTERNA;1
+KIT N° 03;Procedimientos con manejo de fluidos o producción de aerosoles;CONSULTORIO DE PROCEDIMIENTOS;CONSULTA EXTERNA;1
+KIT N° 01;Examen físico, entrevista al paciente y posibilidad de manejo de fluidos;CONSULTORIO NEUMOLOGÍA;CONSULTA EXTERNA;1
+KIT N° 01;Examen físico y procedimiento ;CONSULTORIO ODONTOLOGÍA;CONSULTA EXTERNA;1
+KIT N° 04;Técnico de Enfermería;CONSULTORIO ODONTOLOGÍA;CONSULTA EXTERNA;1
+KIT N° 01;Recolección de muestra de esputo MDR;CONSULTORIO DE TBC;CONSULTA EXTERNA;1
+KIT N° 04;Interactúa con personal;PERSONAL DE ARCHIVO;CONSULTA EXTERNA;1
+KIT N° 05;Sala de Rehabilitación;MEDICINA FÍSICA Y REHABILITACIÓN;CONSULTA EXTERNA;1
+KIT N° 06;Manipulación;HEMODIÁLISIS, DIÁLISIS PERITONEAL;CONSULTA EXTERNA;1
+KIT N° 04;Interactúa con pacientes;ADMISIÓN;EMERGENCIA;1
+KIT N° 05;Entrevista al paciente;TRIAJE;EMERGENCIA;1
+KIT N° 01;Examen físico y manejo de fluidos;SALA DE OBSERVACIÓN;EMERGENCIA;1
+KIT N° 01;Examen físico y manejo de fluidos;UNIDAD DE REANIMACIÓN Y SHOCK TRAUMA;EMERGENCIA;1
+KIT N° 01;Procedimientos menores;TÓPICO;EMERGENCIA;1
+KIT N° 03;En procedimientos invasivos, adicionar uso de gorro quirúrgico.;PROCEDIMIENTOS;EMERGENCIA;1
+KIT N° 03;Examen físico, entrevista al paciente y posibilidad de procedimiento;AISLAMIENTO;EMERGENCIA;1
+KIT N° 01;Examen físico y manejo de fluidos;VISITA MÉDICO/ENFERMERA;HOSPITALIZACIÓN;1
+KIT N° 03;En procedimientos invasivos, adicionar uso de gorro quirúrgico.;PROCEDIMIENTOS;HOSPITALIZACIÓN;1
+KIT N° 03;Examen físico, entrevista al paciente y posibilidad de procedimiento;AISLAMIENTO;HOSPITALIZACIÓN;1
+KIT N° 09;Cirugías;QUIRÓFANOS;CENTRO QUIRÚRGICO;1
+KIT N° 05;Examen físico ;SALA DE DILATACIÓN;CENTRO OBSTÉTRICO;1
+KIT N° 04;Zona Negra: Área administrativa;ZONA NEGRA: ÁREA ADMINISTRATIVA;UNIDAD DE CUIDADOS INTENSIVOS;1
+KIT N° 03;Examen físico y producción de aerosoles;ZONA BLANCA: ÁREA ASISTENCIAL;UNIDAD DE CUIDADOS INTENSIVOS;1
+KIT N° 04;Delantal y collarín plomado(*) Radiología intervencionista, mandilón con falda emplomados(**), se agregan además collarín cervical y protector gonadal plomados;RAYOS X PORTÁTIL Y SALAS;DIAGNÓSTICO POR MÁGENES;1
+KIT N° 04;El paciente debe llevar mascarilla quirúrgica (si tiene síntomas respiratorios);ECOGRAFÍA;DIAGNÓSTICO POR MÁGENES;1
+KIT N° 04;El paciente debe llevar mascarilla quirúrgica (si tiene síntomas respiratorios);TOMOGRAFÍA COMPUTARIZADA;DIAGNÓSTICO POR MÁGENES;1
+KIT N° 04;El paciente debe llevar mascarilla quirúrgica (si tiene síntomas respiratorios);RESONANCIA MAGNÉTICA;DIAGNÓSTICO POR MÁGENES;1
+KIT N° 01;Procedimiento;TOMA DE MUESTRA;PATOLOGÍA CLÍNICA;1
+KIT N° 05;Muestras biológicas fuera de cabina de seguridad;MANEJO DE MUESTRAS;PATOLOGÍA CLÍNICA;1
+KIT N° 05;Muestras biológicas en cabina de seguridad;MANEJO DE MUESTRAS;PATOLOGÍA CLÍNICA;1
+KIT N° 09;Muestras biológicas en sistemas automatizados;MANEJO DE MUESTRAS;PATOLOGÍA CLÍNICA;1
+KIT N° 07;Muestras biológicas fuera de cabina de seguridad;MANEJO DE MUESTRAS;ANATOMÍA PATOLÓGICA;1
+KIT N° 08;Muestras biológicas en cabina de seguridad;MANEJO DE MUESTRAS;ANATOMÍA PATOLÓGICA;1
+KIT N° 09;Muestras biológicas en sistemas automatizados;MANEJO DE MUESTRAS;ANATOMÍA PATOLÓGICA;1
+KIT N° 09;Manipulación de cadaver sin riesgo;MORTUORIO;ANATOMÍA PATOLÓGICA;1
+KIT N° 10;Manipulación de cadáver CON riesgo de generar aerosoles;MORTUORIO;ANATOMÍA PATOLÓGICA;1
+KIT N° 01;Extracción y procesamiento;SALA DE PROCEDIMIENTO;BANCO DE SANGRE;1
+KIT N° 05;Lavado de material;ÁREA ROJA;CENTRAL DE ESTERILIZACIÓN;1
+KIT N° 06;Manipulación;ÁREA AZUL;CENTRAL DE ESTERILIZACIÓN;1
+KIT N° 09;Separación y ordenamiento;ÁREA VERDE;CENTRAL DE ESTERILIZACIÓN;1
+KIT N° 04;Dispensación de medicamentos;FARMACIA CLÍNICA;FARMACIA;1
+KIT N° 11;Preparación de citotóxicos;FARMACOTECNIA;FARMACIA;1
+KIT N° 09;Preparación y dispensación de alimentos;NUTRICIÓN Y DIETÉTICA;NUTRICIÓN Y DIETÉTICA;1
+KIT N° 12;Uso de fuentes radioactivas;PROCEDIMIENTO;MEDICINA NUCLEAR;1
+KIT N° 12;Uso de radiación ionizante;PROCEDIMIENTO;RADIOTERAPIA;1
+KIT N° 09;(*) En caso de realizar procedimientos con aerosoles;TRANSPORTE ASISTIDO DE PACIENTES;AMBULANCIA;1
+KIT N° 05;Chofer Asistencial;TRANSPORTE ASISTIDO DE PACIENTES;AMBULANCIA;1
