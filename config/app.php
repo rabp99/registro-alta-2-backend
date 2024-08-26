@@ -440,9 +440,5 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
-    ],
-    'Cors' => [
-        // Accept all origins
-        'AllowOrigin' => "*"
     ]
 ];
