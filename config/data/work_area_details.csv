@@ -17,11 +17,10 @@ Procedimientos menores;TÓPICO;EMERGENCIA
 En procedimientos invasivos, adicionar uso de gorro quirúrgico.;PROCEDIMIENTOS;EMERGENCIA
 Examen físico, entrevista al paciente y posibilidad de procedimiento;AISLAMIENTO;EMERGENCIA
 Examen físico y manejo de fluidos;VISITA MÉDICO/ENFERMERA;HOSPITALIZACIÓN
-En procedimientos invasivos, adicionar uso de gorro quirúrgico.;PROCEDIMIENTOS;HOSPITALIZACIÓN
+En procedimientos invasivos, con producción de aerosoles.;PROCEDIMIENTOS;HOSPITALIZACIÓN
 Examen físico, entrevista al paciente y posibilidad de procedimiento;AISLAMIENTO;HOSPITALIZACIÓN
-Cirugías;QUIRÓFANOS;CENTRO QUIRÚRGICO
 Examen físico ;SALA DE DILATACIÓN;CENTRO OBSTÉTRICO
-Zona Negra: Área administrativa;ZONA NEGRA: ÁREA ADMINISTRATIVA;UNIDAD DE CUIDADOS INTENSIVOS
+Área administrativa;ZONA NEGRA;UNIDAD DE CUIDADOS INTENSIVOS
 Examen físico y producción de aerosoles;ZONA BLANCA: ÁREA ASISTENCIAL;UNIDAD DE CUIDADOS INTENSIVOS
 Delantal y collarín plomado(*) Radiología intervencionista, mandilón con falda emplomados(**), se agregan además collarín cervical y protector gonadal plomados;RAYOS X PORTÁTIL Y SALAS;DIAGNÓSTICO POR MÁGENES
 El paciente debe llevar mascarilla quirúrgica (si tiene síntomas respiratorios);ECOGRAFÍA;DIAGNÓSTICO POR MÁGENES
@@ -46,4 +45,4 @@ Preparación y dispensación de alimentos;NUTRICIÓN Y DIETÉTICA;NUTRICIÓN Y D
 Uso de fuentes radioactivas;PROCEDIMIENTO;MEDICINA NUCLEAR
 Uso de radiación ionizante;PROCEDIMIENTO;RADIOTERAPIA
 (*) En caso de realizar procedimientos con aerosoles;TRANSPORTE ASISTIDO DE PACIENTES;AMBULANCIA
-Chofer Asistencial;TRANSPORTE ASISTIDO DE PACIENTES;AMBULANCIA
+(*) Cuando apoya al traslado de pacientes.;TRANSPORTE ASISTIDO DE PACIENTES;AMBULANCIA

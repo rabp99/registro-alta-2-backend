@@ -15,7 +15,6 @@ class InsertWorkAreaDetails extends AbstractMigration
      * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
      * @return void
      */
-
     public function up()
     {
         $data = [];

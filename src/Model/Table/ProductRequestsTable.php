@@ -49,6 +49,17 @@ class ProductRequestsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->addBehavior('Base64FileUpload', [
+            'origin_field' => 'signature',
+            'dest_field' => 'signature_path',
+            'path' => 'signatures',
+        ]);
+
+        $this->belongsTo('Workers', [
+            'foreignKey' => ['document_type', 'document_number'],
+            'joinType' => 'INNER',
+        ]);
+
         $this->belongsTo('WorkAreaDetails', [
             'foreignKey' => 'work_area_detail_id',
             'joinType' => 'INNER',

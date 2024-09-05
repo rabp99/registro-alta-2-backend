@@ -49,6 +49,10 @@ class CreateProductRequests extends AbstractMigration
         ])->addColumn('attention_date', 'datetime', [
             'default' => null,
             'null' => true,
+        ])->addColumn('signature_path', 'string', [
+            'default' => null,
+            'limit' => 100,
+            'null' => true,
         ])->addIndex(
             [
                 'year',

@@ -5,6 +5,8 @@
 /logs/*
 /tmp/*
 /vendor/*
+/storage/*
+!/storage/.gitkeep
 
 # OS generated files #
 ######################

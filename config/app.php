@@ -440,5 +440,10 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+    ],
+
+    'DelayResponses' => [
+        'status' => false,
+        "time" => 60
     ]
 ];

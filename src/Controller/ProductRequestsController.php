@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Http\Exception\InternalErrorException;
-
+use Cake\I18n\FrozenTime;
+use Cake\Core\Configure;
 
 /**
  * ProductRequests Controller
@@ -66,6 +67,13 @@ class ProductRequestsController extends AppController
         $productRequest = $this->ProductRequests->create($this->getRequest()->getData());
 
         if ($this->ProductRequests->save($productRequest, ['associated' => ['KitsProductRequests.ProductRequestDetails']])) {
+
+            $delayResponsesStatus = Configure::read('DelayResponses.status');
+            if ($delayResponsesStatus) {
+                $delayTime = Configure::read('DelayResponses.time');
+                sleep($delayTime);
+            }
+
             $message = 'La solicitud fue registrada satisfactoriamente';
             $this->set(compact('productRequest', 'message'));
             return;
@@ -138,9 +146,40 @@ class ProductRequestsController extends AppController
                     "Kits",
                     "ProductRequestDetails" => ["Products"]
                 ],
-                "WorkAreas" => ["Workplaces"]
+                "WorkAreaDetails" => ["WorkAreas" => ["Workplaces"]]
             ]);
 
         $this->set(compact("productRequests"));
+    }
+
+    public function attend()
+    {
+        $this->getRequest()->allowMethod("POST");
+        $this->viewBuilder()->setOption('serialize', true);
+
+        $productRequestYear = $this->getRequest()->getData("product_request_year");
+        $productRequestNumber = $this->getRequest()->getData("product_request_number");
+        $signature = $this->getRequest()->getData("signature");
+
+        $productRequest = $this->ProductRequests->get([$productRequestYear, $productRequestNumber]);
+
+        $user = $this->request->getAttribute('identity');
+        $productRequest->handled_by_user_id = $user->id;
+        $productRequest->attention_date = FrozenTime::now();
+        $productRequest->signature = $signature;
+
+        if ($this->ProductRequests->save($productRequest)) {
+            $delayResponsesStatus = Configure::read('DelayResponses.status');
+            if ($delayResponsesStatus) {
+                $delayTime = Configure::read('DelayResponses.time');
+                sleep($delayTime);
+            }
+
+            $message = __('La solicitud fue atendida satisfactoriamente');
+            $this->set(compact('productRequest', 'message'));
+            return;
+        } else {
+            throw new InternalErrorException(__('La solicitud no fue atendida satisfactoriamente'));
+        }
     }
 }

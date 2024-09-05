@@ -18,6 +18,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $modified
  * @property int $handled_by_user_id
  * @property \Cake\I18n\FrozenTime|null $attention_date
+ * @property string $signature
  *
  * @property \App\Model\Entity\WorkAreaDetail $work_area_detail
  * @property \App\Model\Entity\User $user
@@ -41,6 +42,8 @@ class ProductRequest extends Entity
         'modified' => true,
         'handled_by_user_id' => true,
         'attention_date' => true,
+        'signature' => true,
+        'signature_path' => true,
         'work_area_detail' => true,
         'user' => true,
         'kits_product_requests' => true,

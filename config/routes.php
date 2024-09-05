@@ -454,7 +454,37 @@ $routes->scope('/api', function (RouteBuilder $builder) {
             'get-active-by-worker/:document_type/:document_number' => [
                 'action' => 'getActiveByWorker',
                 'method' => 'GET'
+            ],
+            'attend' => [
+                'action' => 'attend',
+                'method' => 'POST'
             ]
+        ]
+    ]);
+
+    $builder->resources('reports', [
+        'map' => [
+            'get-product-request-records-data/:worker_document_type/:worker_document_number/:start_date/:end_date' => [
+                'action' => 'getProductRequestRecordsData',
+                'method' => 'GET'
+            ],
+            'get-product-request-records-file/:worker_document_type/:worker_document_number/:start_date/:end_date' => [
+                'action' => 'getProductRequestRecordsFile',
+                'method' => 'GET'
+            ],
+        ]
+    ]);
+
+    $builder->resources('parameters', [
+        'map' => [
+            'get-by-keys/:keys' => [
+                'action' => 'getByKeys',
+                'method' => 'GET'
+            ],
+            'save-configuration' => [
+                'action' => 'saveConfiguration',
+                'method' => 'POST'
+            ],
         ]
     ]);
 });
