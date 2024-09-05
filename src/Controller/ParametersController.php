@@ -130,23 +130,23 @@ class ParametersController extends AppController
 
     private function getImageBase64($imagePath)
     {
-        if (!file_exists($imagePath)) {
-            throw new \Exception("El archivo no existe en la ruta proporcionada.");
+        try {
+            $file = new SplFileObject($imagePath, 'r');
+
+            $file->fseek(0, SEEK_END);
+            $fileSize = $file->ftell();
+            $file->rewind();
+            $imageContent = $file->fread($fileSize);
+
+            $mimeType = mime_content_type($imagePath);
+
+            $base64Image = base64_encode($imageContent);
+
+            // Devuelve la cadena base64 con el tipo MIME
+            return 'data:' . $mimeType . ';base64,' . $base64Image;
+        } catch (\Throwable $th) {
+            return "";
         }
-
-        $file = new SplFileObject($imagePath, 'r');
-
-        $file->fseek(0, SEEK_END);
-        $fileSize = $file->ftell();
-        $file->rewind();
-        $imageContent = $file->fread($fileSize);
-
-        $mimeType = mime_content_type($imagePath);
-
-        $base64Image = base64_encode($imageContent);
-
-        // Devuelve la cadena base64 con el tipo MIME
-        return 'data:' . $mimeType . ';base64,' . $base64Image;
     }
 
     public function saveConfiguration()
