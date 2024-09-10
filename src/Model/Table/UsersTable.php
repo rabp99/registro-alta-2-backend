@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -35,12 +36,14 @@ class UsersTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config): void {
+    public function initialize(array $config): void
+    {
         parent::initialize($config);
 
         $this->setTable('users');
         $this->setDisplayField('username');
         $this->setPrimaryKey('id');
+        $this->addBehavior('UserTrackable');
 
         $this->belongsTo('Estados', [
             'foreignKey' => 'estado_id',
@@ -54,7 +57,8 @@ class UsersTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator): Validator {
+    public function validationDefault(Validator $validator): Validator
+    {
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');

@@ -48,6 +48,7 @@ class KitsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
 
         $this->belongsToMany('Products', [
             'foreignKey' => 'kit_id',

@@ -47,6 +47,7 @@ class WorkAreasTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
 
         $this->belongsTo('Workplaces', [
             'foreignKey' => 'workplace_id',

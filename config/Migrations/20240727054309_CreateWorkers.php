@@ -76,6 +76,14 @@ class CreateWorkers extends AbstractMigration
                 'limit' => null,
                 'null' => true,
             ])
+            ->addColumn('type_asistencial', 'boolean', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('type_administrativo', 'boolean', [
+                'default' => null,
+                'null' => false,
+            ])
             ->addColumn('created', 'datetime', [
                 'default' => null,
                 'null' => false,
@@ -84,40 +92,69 @@ class CreateWorkers extends AbstractMigration
                 'default' => null,
                 'null' => false,
             ])
+            ->addColumn('created_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
             ->addIndex(
                 [
                     'worker_occupational_group_id',
                     'worker_condition_id',
                     'worker_medical_speciality_id',
+                    'created_by',
+                    'modified_by'
+                ]
+            )
+            ->addForeignKey(
+                'worker_occupational_group_id',
+                'worker_occupational_groups',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )->addForeignKey(
+                'worker_condition_id',
+                'worker_conditions',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )->addForeignKey(
+                'worker_medical_speciality_id',
+                'worker_medical_specialities',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'created_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'modified_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
                 ]
             );
 
         $table->create();
-
-        $table->addForeignKey(
-            'worker_occupational_group_id',
-            'worker_occupational_groups',
-            'id',
-            [
-                'update' => 'NO_ACTION',
-                'delete' => 'NO_ACTION',
-            ]
-        )->addForeignKey(
-            'worker_condition_id',
-            'worker_conditions',
-            'id',
-            [
-                'update' => 'NO_ACTION',
-                'delete' => 'NO_ACTION',
-            ]
-        )->addForeignKey(
-            'worker_medical_speciality_id',
-            'worker_medical_specialities',
-            'id',
-            [
-                'update' => 'NO_ACTION',
-                'delete' => 'NO_ACTION',
-            ]
-        )->update();
     }
 }

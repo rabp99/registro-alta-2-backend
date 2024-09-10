@@ -31,7 +31,41 @@ class CreateKits extends AbstractMigration
             ->addColumn('modified', 'datetime', [
                 'default' => null,
                 'null' => false,
-            ]);
+            ])
+            ->addColumn('created_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addIndex(
+                [
+                    'created_by',
+                    'modified_by'
+                ]
+            )
+            ->addForeignKey(
+                'created_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'modified_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            );
         $table->create();
     }
 }

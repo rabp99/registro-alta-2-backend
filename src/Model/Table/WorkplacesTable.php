@@ -45,6 +45,7 @@ class WorkplacesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
     }
 
     /**

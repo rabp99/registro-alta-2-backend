@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -46,6 +47,7 @@ class WorkerMedicalSpecialitiesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
 
         $this->hasMany('Workers', [
             'foreignKey' => 'worker_medical_speciality_id',

@@ -153,21 +153,23 @@ class ParametersController extends AppController
     {
         $this->getRequest()->allowMethod("POST");
         $this->viewBuilder()->setOption('serialize', true);
+        $userTrackable = $this->request->getAttribute('identity');
+
         $data = $this->getRequest()->getData();
 
         $parameter = $this->Parameters->findByKey("responsible.full_name")->first();
         $parameter->value = $data["responsibleFullName"];
-        $this->Parameters->saveOrFail($parameter);
+        $this->Parameters->saveOrFail($parameter, ['userId' => $userTrackable->getIdentifier()]);
 
         $parameter = $this->Parameters->findByKey("responsible.job_position")->first();
         $parameter->value = $data["responsibleJobPosition"];
-        $this->Parameters->saveOrFail($parameter);
+        $this->Parameters->saveOrFail($parameter, ['userId' => $userTrackable->getIdentifier()]);
 
         $parameter = $this->Parameters->findByKey("responsible.signature")->first();
         $base64Signature = $data["responsibleSignature"];
         $filePath = $this->saveBase64File($base64Signature);
         $parameter->value = $filePath;
-        $this->Parameters->saveOrFail($parameter);
+        $this->Parameters->saveOrFail($parameter, ['userId' => $userTrackable->getIdentifier()]);
 
         $message = 'La configuración fue guardada satisfactoriamente';
         $this->set(compact('message'));

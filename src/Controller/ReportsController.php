@@ -53,10 +53,13 @@ class ReportsController extends AppController
         ]);
 
         if (!empty($startDate) && !empty($endDate)) {
-            $query->andWhere([
-                'ProductRequests.attention_date >=' => $startDate,
-                'ProductRequests.attention_date <=' => $endDate
-            ]);
+            $query->andWhere(function ($exp, $query) use ($startDate, $endDate) {
+                return $exp->between(
+                    $query->func()->date(['ProductRequests.attention_date' => 'identifier']),
+                    $startDate,
+                    $endDate
+                );
+            });
         }
 
         $query->innerJoinWith('WorkAreaDetails', function ($q) {
@@ -163,10 +166,13 @@ class ReportsController extends AppController
         ]);
 
         if (!empty($startDate) && !empty($endDate)) {
-            $query->andWhere([
-                'ProductRequests.attention_date >=' => $startDate,
-                'ProductRequests.attention_date <=' => $endDate
-            ]);
+            $query->andWhere(function ($exp, $query) use ($startDate, $endDate) {
+                return $exp->between(
+                    $query->func()->date(['ProductRequests.attention_date' => 'identifier']),
+                    $startDate,
+                    $endDate
+                );
+            });
         }
 
         $query->innerJoinWith('WorkAreaDetails', function ($q) {
@@ -225,7 +231,9 @@ class ReportsController extends AppController
             ->first()
             ->get('value');
 
-        $reportProductRequestsRecordNumber = $this->Parameters->getNextReportProductRequestsRecordNunber();
+        $userTrackable = $this->getRequest()->getAttribute('identity');
+
+        $reportProductRequestsRecordNumber = $this->Parameters->getNextReportProductRequestsRecordNunber($userTrackable->getIdentifier());
 
         $spreadsheet = IOFactory::load(RESOURCES . 'registro-epp.xlsx');
         $sheet = $spreadsheet->getActiveSheet();

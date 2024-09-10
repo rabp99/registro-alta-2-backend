@@ -48,6 +48,7 @@ class ProductRequestsTable extends Table
         $this->setPrimaryKey(['year', 'number']);
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
 
         $this->addBehavior('Base64FileUpload', [
             'origin_field' => 'signature',

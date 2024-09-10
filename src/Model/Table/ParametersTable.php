@@ -46,6 +46,7 @@ class ParametersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
     }
 
     /**
@@ -99,7 +100,7 @@ class ParametersTable extends Table
         return $rules;
     }
 
-    public function getNextReportProductRequestsRecordNunber()
+    public function getNextReportProductRequestsRecordNunber($userId)
     {
         $parameter = $this->find()
             ->where(["Parameters.key" => 'reports.product_requests_records.record_number'])
@@ -124,7 +125,7 @@ class ParametersTable extends Table
         }
 
         $parameter->value = $nextReportProductRequestsRecordNunber;
-        $this->saveOrFail($parameter);
+        $this->saveOrFail($parameter, ['userId' => $userId]);
 
         return $nextReportProductRequestsRecordNunber;
     }

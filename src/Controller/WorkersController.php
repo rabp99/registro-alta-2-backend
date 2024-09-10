@@ -89,7 +89,9 @@ class WorkersController extends AppController
         $worker = $this->Workers->newEntity($this->getRequest()->getData());
         $errors = [];
 
-        if ($this->Workers->save($worker)) {
+        $userTrackable = $this->request->getAttribute('identity');
+
+        if ($this->Workers->save($worker, ['userId' => $userTrackable->getIdentifier()])) {
             $message = 'El colaborador fue registrado correctamente';
         } else {
             $message = 'El colaborador no fue registrado correctamente';
@@ -102,30 +104,30 @@ class WorkersController extends AppController
     }
 
     /**
-     * Edit method
+     * Update method
      *
-     * @param string|null $id Worker id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function update()
     {
-        $worker = $this->Workers->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $worker = $this->Workers->patchEntity($worker, $this->request->getData());
-            if ($this->Workers->save($worker)) {
-                $this->Flash->success(__('The worker has been saved.'));
+        $this->getRequest()->allowMethod("PUT");
+        $this->viewBuilder()->setOption('serialize', true);
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The worker could not be saved. Please, try again.'));
+        $documentType = $this->getRequest()->getParam("document_type");
+        $documentNumber = $this->getRequest()->getParam("document_number");
+
+        $worker = $this->Workers->get([$documentType, $documentNumber]);
+        $worker = $this->Workers->patchEntity($worker, $this->getRequest()->getData());
+        $userTrackable = $this->getRequest()->getAttribute('identity');
+
+        if ($this->Workers->save($worker, ['userId' => $userTrackable->getIdentifier()])) {
+            $message = 'El colaborador fue registrado correctamente';
+            $this->set(compact('worker', "message"));
+            return;
+        } else {
+            throw new NotFoundException("El colaborador no fue modificado correctamente");
         }
-        $workerOccupationalGroups = $this->Workers->WorkerOccupationalGroups->find('list', ['limit' => 200]);
-        $workerConditions = $this->Workers->WorkerConditions->find('list', ['limit' => 200]);
-        $workerMedicalSpecialities = $this->Workers->WorkerMedicalSpecialities->find('list', ['limit' => 200]);
-        $this->set(compact('worker', 'workerOccupationalGroups', 'workerConditions', 'workerMedicalSpecialities'));
     }
 
     /**

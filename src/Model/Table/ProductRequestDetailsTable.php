@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -47,6 +48,7 @@ class ProductRequestDetailsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
 
         $this->belongsTo('KitsProductRequests', [
             'foreignKey' => 'kits_product_request_id',

@@ -19,14 +19,14 @@ class InsertWorkers extends AbstractMigration
     public function up()
     {
         $data = [];
-        $file = fopen('config/data/workers.csv', 'r');
+        $file = fopen('config/data/workers2.csv', 'r');
 
         // Skip the header row if your CSV file has one
         fgetcsv($file);
 
         while (($row = fgetcsv($file, null, ';')) !== FALSE) {
             $documentType = $this->getDocumentType($row[0]);
-            $workerOccupationalGroupId = $this->getWorkerOccupationalGroupId($row[2]);
+            $workerOccupationalGroup = $this->getWorkerOccupationalGroup($row[2]);
             $workerConditionId = $this->getWorkerConditionId($row[3]);
             $tuitionCode = $this->getTuitionCode($row[7]);
             $payrollCode = $this->getPayrollCode($row[8]);
@@ -34,10 +34,13 @@ class InsertWorkers extends AbstractMigration
             $workerMedicalSpecialityId = $this->getWorkerMedicalSpecialityId($row[10]);
             $birthDate = $this->getBirthDate($row[11]);
 
+            $typeAsistencial = $workerOccupationalGroup->type === "ASISTENCIAL";
+            $typeAdministrativo = $workerOccupationalGroup->type === "ADMINISTRATIVO";
+
             $data[] = [
                 'document_type' => $documentType,
                 'document_number' => $row[1],
-                'worker_occupational_group_id' => $workerOccupationalGroupId,
+                'worker_occupational_group_id' => $workerOccupationalGroup->id,
                 'worker_condition_id' => $workerConditionId,
                 'last_name1' => $row[4],
                 'last_name2' => $row[5],
@@ -47,6 +50,8 @@ class InsertWorkers extends AbstractMigration
                 'belongs_other_cas' => $belongsOtherCas,
                 'worker_medical_speciality_id' => $workerMedicalSpecialityId,
                 'birth_date' => $birthDate,
+                'type_asistencial' => $typeAsistencial,
+                'type_administrativo' => $typeAdministrativo,
                 'created' => FrozenTime::now(),
                 'modified' => FrozenTime::now(),
             ];
@@ -86,7 +91,7 @@ class InsertWorkers extends AbstractMigration
         return $documentType ?? "DNI";
     }
 
-    public function getWorkerOccupationalGroupId($data)
+    public function getWorkerOccupationalGroup($data)
     {
         $workerOccupationalGroupsTable = TableRegistry::getTableLocator()->get('worker_occupational_groups');
 
@@ -102,7 +107,7 @@ class InsertWorkers extends AbstractMigration
             }
         );
 
-        return $workerOccupationalGroup->id;
+        return $workerOccupationalGroup;
     }
 
     public function getWorkerConditionId($data)

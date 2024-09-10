@@ -54,6 +54,8 @@ class Worker extends Entity
         'belongs_other_cas' => true,
         'worker_medical_speciality_id' => true,
         'birth_date' => true,
+        'type_asistencial' => true,
+        'type_administrativo' => true,
         'created' => true,
         'modified' => true,
         'worker_occupational_group' => true,

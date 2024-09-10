@@ -168,7 +168,7 @@ class ProductRequestsController extends AppController
         $productRequest->attention_date = FrozenTime::now();
         $productRequest->signature = $signature;
 
-        if ($this->ProductRequests->save($productRequest)) {
+        if ($this->ProductRequests->save($productRequest, ['userId' => $user->getIdentifier()])) {
             $delayResponsesStatus = Configure::read('DelayResponses.status');
             if ($delayResponsesStatus) {
                 $delayTime = Configure::read('DelayResponses.time');

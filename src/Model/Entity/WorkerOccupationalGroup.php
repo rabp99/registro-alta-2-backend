@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -11,6 +12,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $description
  * @property bool $status
+ * @property string $type
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
@@ -30,6 +32,7 @@ class WorkerOccupationalGroup extends Entity
     protected $_accessible = [
         'description' => true,
         'status' => true,
+        'type' => true,
         'created' => true,
         'modified' => true,
         'workers' => true,

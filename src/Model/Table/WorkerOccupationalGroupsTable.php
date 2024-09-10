@@ -47,6 +47,7 @@ class WorkerOccupationalGroupsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
 
         $this->hasMany('Workers', [
             'foreignKey' => 'worker_occupational_group_id',

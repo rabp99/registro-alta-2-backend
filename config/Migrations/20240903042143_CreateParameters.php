@@ -15,32 +15,73 @@ class CreateParameters extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('parameters');
-        $table->addColumn('key', 'string', [
-            'default' => null,
-            'limit' => 100,
-            'null' => false,
-        ])->addColumn('description', 'string', [
-            'default' => null,
-            'limit' => 100,
-            'null' => false,
-        ])->addColumn('value', 'string', [
-            'default' => null,
-            'limit' => 500,
-            'null' => true,
-        ])->addColumn('visible', 'boolean', [
-            'default' => null,
-            'null' => true,
-        ])->addColumn('created', 'datetime', [
-            'default' => null,
-            'null' => false,
-        ])->addColumn('modified', 'datetime', [
-            'default' => null,
-            'null' => false,
-        ])->addIndex(['key'], [
-            'unique' => true,
-            'name' => 'UNIQUE_KEY'
-        ]);
+        $table = $this->table('parameters')
+            ->addColumn('key', 'string', [
+                'default' => null,
+                'limit' => 100,
+                'null' => false,
+            ])
+            ->addColumn('description', 'string', [
+                'default' => null,
+                'limit' => 100,
+                'null' => false,
+            ])
+            ->addColumn('value', 'string', [
+                'default' => null,
+                'limit' => 500,
+                'null' => true,
+            ])
+            ->addColumn('visible', 'boolean', [
+                'default' => null,
+                'null' => true,
+            ])
+            ->addColumn('created', 'datetime', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('modified', 'datetime', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('created_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addIndex(['key'], [
+                'unique' => true,
+                'name' => 'UNIQUE_KEY'
+            ])
+            ->addIndex(
+                [
+                    'created_by',
+                    'modified_by'
+                ]
+            )
+            ->addForeignKey(
+                'created_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'modified_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            );
+
         $table->create();
     }
 }

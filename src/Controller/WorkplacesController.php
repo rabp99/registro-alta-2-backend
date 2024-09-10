@@ -16,7 +16,7 @@ class WorkplacesController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->allowUnauthenticated(['getListByWorkerType']);
+        $this->Authentication->allowUnauthenticated(['getListByWorker']);
     }
 
     /**
@@ -111,17 +111,34 @@ class WorkplacesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function getListByWorkerType()
+    public function getListByWorker()
     {
         $this->getRequest()->allowMethod("GET");
         $this->viewBuilder()->setOption('serialize', true);
 
-        $workerType = $this->getRequest()->getParam("worker_type");
+        $this->loadModel("Workers");
 
-        if ($workerType === "ASISTENCIAL") {
-            $workplaces = $this->Workplaces->findByTypeAsistencial(true);
-        } elseif ($workerType === "ADMINISTRATIVO") {
-            $workplaces = $this->Workplaces->findByTypeAdministrativo(true);
+        $workerDocumentType = $this->getRequest()->getParam("document_type");
+        $workerDocumentNumber = $this->getRequest()->getParam("document_number");
+
+        $worker = $this->Workers->get([$workerDocumentType, $workerDocumentNumber]);
+
+        switch (true) {
+            case $worker->type_asistencial && $worker->type_administrativo:
+                $workplaces = $this->Workplaces->find()
+                    ->where([
+                        'OR' => [
+                            'Workplaces.type_administrativo' => true,
+                            'Workplaces.type_asistencial' => true,
+                        ]
+                    ]);
+                break;
+            case $worker->type_asistencial && !$worker->type_administrativo:
+                $workplaces = $this->Workplaces->findByTypeAsistencial(true);
+                break;
+            case $worker->type_administrativo && !$worker->type_asistencial:
+                $workplaces = $this->Workplaces->findByTypeAdministrativo(true);
+                break;
         }
 
         $this->set(compact('workplaces'));

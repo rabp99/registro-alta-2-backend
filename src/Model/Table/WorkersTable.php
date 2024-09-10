@@ -49,6 +49,7 @@ class WorkersTable extends Table
         $this->setPrimaryKey(['document_type', 'document_number']);
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
 
         $this->belongsTo('WorkerOccupationalGroups', [
             'foreignKey' => 'worker_occupational_group_id',

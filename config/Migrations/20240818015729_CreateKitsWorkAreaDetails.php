@@ -15,46 +15,85 @@ class CreateKitsWorkAreaDetails extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('kits_work_area_details');
-        $table->addColumn('kit_id', 'integer', [
-            'default' => null,
-            'limit' => null,
-            'null' => false,
-        ])->addColumn('work_area_detail_id', 'integer', [
-            'default' => null,
-            'limit' => null,
-            'null' => false,
-        ])->addColumn('amount', 'integer', [
-            'default' => 1,
-            'limit' => null,
-            'null' => false,
-        ])->addColumn('created', 'datetime', [
-            'default' => null,
-            'null' => false,
-        ])->addColumn('modified', 'datetime', [
-            'default' => null,
-            'null' => false,
-        ])->addIndex(
-            [
+        $table = $this->table('kits_work_area_details')
+            ->addColumn('kit_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('work_area_detail_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('amount', 'integer', [
+                'default' => 1,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('created', 'datetime', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('modified', 'datetime', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('created_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addIndex(
+                [
+                    'kit_id',
+                    'work_area_detail_id',
+                    'created_by',
+                    'modified_by'
+                ]
+            )
+            ->addForeignKey(
                 'kit_id',
+                'kits',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
                 'work_area_detail_id',
-            ]
-        )->addForeignKey(
-            'kit_id',
-            'kits',
-            'id',
-            [
-                'update' => 'NO_ACTION',
-                'delete' => 'NO_ACTION',
-            ]
-        )->addForeignKey(
-            'work_area_detail_id',
-            'work_area_details',
-            'id',
-            [
-                'update' => 'NO_ACTION',
-                'delete' => 'NO_ACTION',
-            ]
-        )->create();
+                'work_area_details',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'created_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'modified_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            );
+
+        $table->create();
     }
 }

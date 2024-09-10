@@ -47,6 +47,7 @@ class KitsProductRequestsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('UserTrackable');
 
         $this->belongsTo('Kits', [
             'foreignKey' => 'kit_id',

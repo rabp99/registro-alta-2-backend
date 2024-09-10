@@ -15,7 +15,7 @@ class CreateWorkAreaDetails extends AbstractMigration
      */
     public function change()
     {
-        $this->table('work_area_details')
+        $table = $this->table('work_area_details')
             ->addColumn('description', 'string', [
                 'default' => null,
                 'limit' => 200,
@@ -39,9 +39,21 @@ class CreateWorkAreaDetails extends AbstractMigration
                 'default' => null,
                 'null' => false,
             ])
+            ->addColumn('created_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
             ->addIndex(
                 [
                     'work_area_id',
+                    'created_by',
+                    'modified_by'
                 ]
             )
             ->addForeignKey(
@@ -52,6 +64,26 @@ class CreateWorkAreaDetails extends AbstractMigration
                     'update' => 'NO_ACTION',
                     'delete' => 'NO_ACTION',
                 ]
-            )->create();
+            )
+            ->addForeignKey(
+                'created_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'modified_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            );
+
+        $table->create();
     }
 }

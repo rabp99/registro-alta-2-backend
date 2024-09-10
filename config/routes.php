@@ -382,7 +382,11 @@ $routes->scope('/api', function (RouteBuilder $builder) {
             'find-by-document/:document_type/:document_number' => [
                 'action' => 'findByDocument',
                 'method' => 'GET'
-            ]
+            ],
+            'update/:document_type/:document_number' => [
+                'action' => 'update',
+                'method' => 'PUT'
+            ],
         ]
     ]);
 
@@ -415,8 +419,8 @@ $routes->scope('/api', function (RouteBuilder $builder) {
 
     $builder->resources('workplaces', [
         'map' => [
-            'get-list-by-worker-type/:worker_type' => [
-                'action' => 'getListByWorkerType',
+            'get-list-by-worker/:document_type/:document_number' => [
+                'action' => 'getListByWorker',
                 'method' => 'GET'
             ]
         ]

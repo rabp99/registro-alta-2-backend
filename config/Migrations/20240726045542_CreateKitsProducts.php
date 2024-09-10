@@ -20,24 +20,43 @@ class CreateKitsProducts extends AbstractMigration
                 'default' => null,
                 'limit' => null,
                 'null' => false,
-            ])->addColumn('product_id', 'integer', [
+            ])
+            ->addColumn('product_id', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
-            ])->addColumn('amount', 'integer', [
+            ])
+            ->addColumn('amount', 'integer', [
                 'default' => 1,
                 'limit' => null,
                 'null' => false,
+            ])
+            ->addColumn('created', 'datetime', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('modified', 'datetime', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('created_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
             ])
             ->addIndex(
                 [
                     'kit_id',
                     'product_id',
+                    'created_by',
+                    'modified_by'
                 ]
-            );
-        $table->create();
-
-        $table
+            )
             ->addForeignKey(
                 'kit_id',
                 'kits',
@@ -56,6 +75,25 @@ class CreateKitsProducts extends AbstractMigration
                     'delete' => 'NO_ACTION',
                 ]
             )
-            ->update();
+            ->addForeignKey(
+                'created_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'modified_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            );
+
+        $table->create();
     }
 }
