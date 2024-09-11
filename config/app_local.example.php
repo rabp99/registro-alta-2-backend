@@ -91,4 +91,8 @@ return [
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
+    'DelayResponses' => [
+        'status' => false,
+        "time" => 60
+    ]
 ];

@@ -15,48 +15,74 @@ class CreateUsers extends AbstractMigration
      */
     public function change()
     {
-        /*
         $this->table('users')
-            ->addColumn('status', 'string', [
-                'default' => null,
-                'limit' => 10,
-                'null' => false,
-            ])->addColumn('username', 'string', [
+            ->addColumn('username', 'string', [
                 'default' => null,
                 'limit' => 90,
                 'null' => false,
-            ])->addColumn('password', 'string', [
+            ])
+            ->addColumn('password', 'string', [
                 'default' => null,
                 'limit' => 200,
                 'null' => false,
-            ])->addColumn('first_name', 'string', [
+            ])
+            ->addColumn('full_name', 'string', [
                 'default' => null,
                 'limit' => 120,
                 'null' => false,
-            ])->addColumn('last_name1', 'string', [
+            ])
+            ->addColumn('role', 'string', [
                 'default' => null,
-                'limit' => 120,
+                'limit' => 60,
                 'null' => false,
-            ])->addColumn('last_name2', 'string', [
-                'default' => null,
-                'limit' => 120,
-                'null' => false,
-            ])->addColumn('role_id', 'integer', [
+            ])
+            ->addColumn('status', 'boolean', [
                 'default' => null,
                 'limit' => null,
                 'null' => false,
-            ])->addIndex(
+            ])
+            ->addColumn('created', 'datetime', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('modified', 'datetime', [
+                'default' => null,
+                'null' => false,
+            ])
+            ->addColumn('created_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified_by', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addIndex(
                 [
                     'username',
                 ],
                 ['unique' => true]
-            )->addIndex(
+            )
+            ->addIndex(
                 [
-                    'role_id',
+                    'created_by',
+                    'modified_by'
                 ]
-            )->addForeignKey(
-                'role_id',
-                'roles',
+            )
+            ->addForeignKey(
+                'created_by',
+                'users',
+                'id',
+                [
+                    'update' => 'NO_ACTION',
+                    'delete' => 'NO_ACTION',
+                ]
+            )
+            ->addForeignKey(
+                'modified_by',
+                'users',
                 'id',
                 [
                     'update' => 'NO_ACTION',
@@ -64,8 +90,5 @@ class CreateUsers extends AbstractMigration
                 ]
             )
             ->create();
-    
-    
-    */
     }
 }

@@ -44,11 +44,6 @@ class UsersTable extends Table
         $this->setDisplayField('username');
         $this->setPrimaryKey('id');
         $this->addBehavior('UserTrackable');
-
-        $this->belongsTo('Estados', [
-            'foreignKey' => 'estado_id',
-            'joinType' => 'INNER',
-        ]);
     }
 
     /**
@@ -77,16 +72,16 @@ class UsersTable extends Table
             ->notEmptyString('password');
 
         $validator
-            ->scalar('nombre_completo')
-            ->maxLength('nombre_completo', 120)
-            ->requirePresence('nombre_completo', 'create')
-            ->notEmptyString('nombre_completo');
+            ->scalar('full_name')
+            ->maxLength('full_name', 120)
+            ->requirePresence('full_name', 'create')
+            ->notEmptyString('full_name');
 
         $validator
-            ->scalar('rol')
-            ->maxLength('rol', 60)
-            ->requirePresence('rol', 'create')
-            ->notEmptyString('rol');
+            ->scalar('role')
+            ->maxLength('role', 60)
+            ->requirePresence('role', 'create')
+            ->notEmptyString('role');
 
         return $validator;
     }
@@ -101,7 +96,6 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
-        $rules->add($rules->existsIn(['estado_id'], 'Estados'), ['errorField' => 'estado_id']);
 
         return $rules;
     }

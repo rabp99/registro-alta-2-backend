@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -14,6 +15,7 @@ declare(strict_types=1);
  * @since     3.3.0
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App;
 
 use Authentication\AuthenticationService;
@@ -116,9 +118,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
      * @return void
      * @link https://book.cakephp.org/4/en/development/dependency-injection.html#dependency-injection
      */
-    public function services(ContainerInterface $container): void
-    {
-    }
+    public function services(ContainerInterface $container): void {}
 
     /**
      * Bootstrapping for CLI application.
@@ -138,21 +138,22 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $this->addPlugin('Migrations');
 
         // Load more plugins here
-    }    
-    
-    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface {
+    }
+
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    {
         $service = new AuthenticationService();
-      
+
         $fields = [
             IdentifierInterface::CREDENTIAL_USERNAME => 'username',
             IdentifierInterface::CREDENTIAL_PASSWORD => 'password'
         ];
-        
+
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => $fields,
             'loginUrl' => '/api/users/login.json'
         ]);
-        
+
         $service->loadIdentifier('Authentication.Password', [
             'fields' => $fields,
             'resolver' => [
@@ -169,14 +170,14 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 ]
             ]
         ]);
-        
+
         $service->loadIdentifier('Authentication.JwtSubject');
         $service->loadAuthenticator('Authentication.Jwt', [
             'secretKey' => file_get_contents(CONFIG . '/jwt.pem'),
-            'algorithms' => ['RS256'],
+            'algorithm' => 'RS256',
             'returnPayload' => false
         ]);
-        
+
         return $service;
     }
 }

@@ -13,14 +13,6 @@ class InsertUsers extends AbstractMigration
      */
     public function up()
     {
-        // Obtén la tabla que deseas modificar
-        $estadosTable = TableRegistry::getTableLocator()->get('estados');
-
-        // Realiza la consulta y actualización de datos
-        $estado = $estadosTable->find()
-            ->where(['descripcion' => 'Activo'])
-            ->first();
-
         $usersTable = $this->table('users');
 
         $hasher = new DefaultPasswordHasher();
@@ -28,9 +20,9 @@ class InsertUsers extends AbstractMigration
         $userData = [
             'username' => "70801887",
             'password' => $hasher->hash('70801887'),
-            'nombre_completo' => 'BOCANEGRA PALACIOS ROBERTO ANDRÉ',
-            'rol' => "Administrador",
-            'estado_id' => $estado->id,
+            'full_name' => 'BOCANEGRA PALACIOS ROBERTO ANDRÉ',
+            'role' => "Administrador",
+            'status' => true
         ];
 
         $usersTable->insert($userData)->saveData();
