@@ -445,5 +445,6 @@ return [
     'DelayResponses' => [
         'status' => false,
         "time" => 60
-    ]
+    ],
+    'ImageResizeWidth' => 300
 ];

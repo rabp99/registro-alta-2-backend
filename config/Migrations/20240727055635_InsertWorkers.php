@@ -19,7 +19,7 @@ class InsertWorkers extends AbstractMigration
     public function up()
     {
         $data = [];
-        $file = fopen('config/data/workers2.csv', 'r');
+        $file = fopen('config/data/workers.csv', 'r');
 
         // Skip the header row if your CSV file has one
         fgetcsv($file);

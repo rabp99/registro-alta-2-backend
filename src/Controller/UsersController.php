@@ -34,7 +34,6 @@ class UsersController extends AppController
         $itemsPerPage = $this->request->getQuery('itemsPerPage');
 
         $query = $this->Users->find()
-            ->contain(['Estados'])
             ->order(['Users.id']);
 
         if ($username) {
@@ -82,7 +81,7 @@ class UsersController extends AppController
     {
         $this->getRequest()->allowMethod('POST');
         $user = $this->Users->newEntity($this->request->getData());
-        $user->estado_id = 1;
+        $user->status = true;
         $errors = null;
 
         $userTrackable = $this->getRequest()->getAttribute('identity');
@@ -127,7 +126,7 @@ class UsersController extends AppController
             $user = $this->Users->get($user_id);
 
             $payload = [
-                'iss' => 'padron',
+                'iss' => 'sistema-epps',
                 'sub' => $user->id,
                 'exp' => time() + 604800,
             ];
@@ -183,17 +182,6 @@ class UsersController extends AppController
         }
 
         $this->set(compact('message'));
-        $this->viewBuilder()->setOption('serialize', true);
-    }
-
-    public function getByUsername()
-    {
-        $username = $this->request->getParam('username');
-        $user = $this->Users->findByUsername($username)
-            ->contain(['Asegurados'])
-            ->first();
-
-        $this->set(compact('user'));
         $this->viewBuilder()->setOption('serialize', true);
     }
 }

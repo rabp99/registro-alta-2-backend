@@ -61,18 +61,10 @@ $routes->scope('/api', function (RouteBuilder $builder) {
                 'action' => 'changePassword',
                 'method' => 'POST'
             ],
-            'get_by_username/:username' => [
-                'action' => 'getByUsername',
-                'method' => 'GET'
-            ],
             'change_password_admin' => [
                 'action' => 'changePasswordAdmin',
                 'method' => 'POST'
             ],
-            'add_user_farmacia' => [
-                'action' => 'addUserFarmacia',
-                'method' => 'POST'
-            ]
         ]
     ]);
     $builder->resources('trabajadores');

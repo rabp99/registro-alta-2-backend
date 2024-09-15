@@ -9,7 +9,8 @@ use Cake\ORM\Behavior;
 use Cake\Event\Event;
 use Cake\ORM\Entity;
 use Cake\Utility\Security;
-use SplFileObject;
+use Intervention\Image\ImageManagerStatic as Image;
+use Cake\Core\Configure;
 
 /**
  * Base64FileUpload behavior
@@ -46,14 +47,20 @@ class Base64FileUploadBehavior extends Behavior
         }
 
         $base64FileString = preg_replace('#^data:image/\w+;base64,#i', '', $base64File);
-
         $fileData = base64_decode($base64FileString);
 
         $filename = Security::hash(time() . rand()) . '.png';
-
         $filePath = $path . DS . $filename;
-        $file = new SplFileObject($filePath, 'w');
-        $file->fwrite($fileData);
+
+        $image = Image::make($fileData);
+
+        $imageResizeWidth = Configure::read('ImageResizeWidth');
+        $image->resize($imageResizeWidth, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        $image->save($filePath);
 
         return $this->getConfig('path') . DS . $filename;
     }

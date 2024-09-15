@@ -18,9 +18,9 @@ class InsertUsers extends AbstractMigration
         $hasher = new DefaultPasswordHasher();
 
         $userData = [
-            'username' => "70801887",
-            'password' => $hasher->hash('70801887'),
-            'full_name' => 'BOCANEGRA PALACIOS ROBERTO ANDRÉ',
+            'username' => "41870794",
+            'password' => $hasher->hash('41870794'),
+            'full_name' => 'ÁVILA ULLOA, CÉSAR',
             'role' => "Administrador",
             'status' => true
         ];

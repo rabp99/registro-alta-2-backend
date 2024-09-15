@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -12,11 +13,11 @@ use Authentication\PasswordHasher\DefaultPasswordHasher;
  * @property int $id
  * @property string $username
  * @property string $password
- * @property string $nombre_completo
- * @property string $rol
- * @property int $estado_id
- *
- * @property \App\Model\Entity\Estado $estado
+ * @property string $full_name
+ * @property string $role
+ * @property bool $status
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  */
 class User extends Entity
 {
@@ -32,10 +33,9 @@ class User extends Entity
     protected $_accessible = [
         'username' => true,
         'password' => true,
-        'nombre_completo' => true,
-        'rol' => true,
-        'estado' => true,
-        'estado_id' => true,
+        'full_name' => true,
+        'role' => true,
+        'status' => true,
     ];
 
     /**
@@ -46,8 +46,9 @@ class User extends Entity
     protected $_hidden = [
         'password',
     ];
-    
-    protected function _setPassword(string $password) {
+
+    protected function _setPassword(string $password)
+    {
         $hasher = new DefaultPasswordHasher();
         return $hasher->hash($password);
     }

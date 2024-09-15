@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Migrations\AbstractSeed;
@@ -19,17 +20,10 @@ class UsersSeed extends AbstractSeed
      *
      * @return void
      */
-    public function run() {
+    public function run()
+    {
         $usersTable = TableRegistry::getTableLocator()->get('users');
-        
-        $user = $usersTable->newEmptyEntity();
-        $user->username = "19254177";
-        $user->password = "19254177";
-        $user->nombre_completo = utf8_decode("QUISPE RODRÍGUEZ, BENJAMIN DANILO");
-        $user->rol = "Administrador";
-        $user->estado_id = 1;
-        $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "41870794";
         $user->password = "41870794";
@@ -37,15 +31,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
-        $user = $usersTable->newEmptyEntity();
-        $user->username = "70801887";
-        $user->password = "70801887";
-        $user->nombre_completo = utf8_decode("BOCANEGRA PALACIOS, ROBERTO ANDRÉ");
-        $user->rol = utf8_decode("Vestidores");
-        $user->estado_id = 1;
-        $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "47104444";
         $user->password = "47104444";
@@ -53,9 +39,9 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Lavandería");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         // Farmacia
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "43068305";
         $user->password = "43068305";
@@ -63,7 +49,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "41275219";
         $user->password = "41275219";
@@ -71,7 +57,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "42991271";
         $user->password = "42991271";
@@ -79,7 +65,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "46450395";
         $user->password = "46450395";
@@ -87,7 +73,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "45912204";
         $user->password = "45912204";
@@ -95,7 +81,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "18140108";
         $user->password = "18140108";
@@ -103,7 +89,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "48286334";
         $user->password = "48286334";
@@ -111,7 +97,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "41008490";
         $user->password = "41008490";
@@ -119,8 +105,8 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
-        
+
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "40646475";
         $user->password = "40646475";
@@ -128,7 +114,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "40181644";
         $user->password = "40181644";
@@ -136,7 +122,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "18897398";
         $user->password = "18897398";
@@ -144,7 +130,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "18893066";
         $user->password = "18893066";
@@ -152,7 +138,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "41755530";
         $user->password = "41755530";
@@ -160,7 +146,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "46164981";
         $user->password = "46164981";
@@ -168,7 +154,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "40475650";
         $user->password = "40475650";
@@ -176,7 +162,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         // Vestidores        
         $user = $usersTable->newEmptyEntity();
         $user->username = "41089612";
@@ -185,7 +171,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Vestidores");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "18144309";
         $user->password = "18144309";
@@ -193,7 +179,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Vestidores");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "43974133";
         $user->password = "43974133";
@@ -201,7 +187,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Vestidores");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "44924671";
         $user->password = "44924671";
@@ -209,7 +195,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Vestidores");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "42095512";
         $user->password = "42095512";
@@ -217,7 +203,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Vestidores");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "19560461";
         $user->password = "19560461";
@@ -225,7 +211,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Vestidores");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "45265506";
         $user->password = "45265506";
@@ -233,7 +219,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Vestidores");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         // Lavanderia
         $user = $usersTable->newEmptyEntity();
         $user->username = "lavanderia";
@@ -242,7 +228,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Lavandería");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         // Administrador
         $user = $usersTable->newEmptyEntity();
         $user->username = "40900935";
@@ -251,7 +237,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Administrador");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         // Médico Ocupacional
         $user = $usersTable->newEmptyEntity();
         $user->username = "70296473";
@@ -260,7 +246,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Médico Ocupacional");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         // Jefe de Servicio
         $user = $usersTable->newEmptyEntity();
         $user->username = "32939794";
@@ -269,7 +255,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Jefe de Servicio");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         // Farmacia
         $user = $usersTable->newEmptyEntity();
         $user->username = "41534365";
@@ -278,7 +264,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "44816788";
         $user->password = "44816788";
@@ -286,7 +272,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "40439472";
         $user->password = "40439472";
@@ -294,7 +280,7 @@ class UsersSeed extends AbstractSeed
         $user->rol = utf8_decode("Farmacia");
         $user->estado_id = 1;
         $usersTable->save($user);
-        
+
         $user = $usersTable->newEmptyEntity();
         $user->username = "44380552";
         $user->password = "44380552";
