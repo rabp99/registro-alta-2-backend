@@ -128,8 +128,8 @@ class WorkplacesController extends AppController
                 $workplaces = $this->Workplaces->find()
                     ->where([
                         'OR' => [
-                            'Workplaces.type_administrativo' => true,
                             'Workplaces.type_asistencial' => true,
+                            'Workplaces.type_administrativo' => true,
                         ]
                     ]);
                 break;

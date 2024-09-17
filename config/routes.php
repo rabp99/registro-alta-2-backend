@@ -420,8 +420,8 @@ $routes->scope('/api', function (RouteBuilder $builder) {
 
     $builder->resources('work-areas', [
         'map' => [
-            'get-list-by-workplace-and-worker-type/:workplace_id/:worker_type' => [
-                'action' => 'getListByWorkplaceAndWorkerType',
+            'get-list-by-workplace-and-worker/:workplace_id/:worker_document_type/:worker_document_number' => [
+                'action' => 'getListByWorkplaceAndWorker',
                 'method' => 'GET'
             ]
         ]

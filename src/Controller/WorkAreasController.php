@@ -15,7 +15,7 @@ class WorkAreasController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Authentication->allowUnauthenticated(['getListByWorkplaceAndWorkerType']);
+        $this->Authentication->allowUnauthenticated(['getListByWorkplaceAndWorker']);
     }
 
     /**
@@ -110,18 +110,35 @@ class WorkAreasController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function getListByWorkplaceAndWorkerType()
+    public function getListByWorkplaceAndWorker()
     {
         $this->getRequest()->allowMethod("GET");
         $this->viewBuilder()->setOption('serialize', true);
 
-        $workplaceId = $this->getRequest()->getParam("workplace_id");
-        $workerType = $this->getRequest()->getParam("worker_type");
+        $this->loadModel("Workers");
 
-        if ($workerType === "ASISTENCIAL") {
-            $workAreas = $this->WorkAreas->findByWorkplaceIdAndTypeAsistencial($workplaceId, true);
-        } elseif ($workerType === "ADMINISTRATIVO") {
-            $workAreas = $this->WorkAreas->findByWorkplaceIdAndTypeAdministrativo($workplaceId, true);
+        $workplaceId = $this->getRequest()->getParam("workplace_id");
+        $workerDocumentType = $this->getRequest()->getParam("worker_document_type");
+        $workerDocumentNumber = $this->getRequest()->getParam("worker_document_number");
+        $worker = $this->Workers->get([$workerDocumentType, $workerDocumentNumber]);
+
+        switch (true) {
+            case $worker->type_asistencial && $worker->type_administrativo:
+                $workAreas = $this->WorkAreas->find()
+                    ->where([
+                        'WorkAreas.workplace_id' => $workplaceId,
+                        'OR' => [
+                            'WorkAreas.type_asistencial' => true,
+                            'WorkAreas.type_administrativo' => true,
+                        ]
+                    ]);
+                break;
+            case $worker->type_asistencial && !$worker->type_administrativo:
+                $workAreas = $this->WorkAreas->findByWorkplaceIdAndTypeAsistencial($workplaceId, true);
+                break;
+            case $worker->type_administrativo && !$worker->type_asistencial:
+                $workAreas = $this->WorkAreas->findByWorkplaceIdAndTypeAdministrativo($workplaceId, true);
+                break;
         }
 
         $this->set(compact('workAreas'));
