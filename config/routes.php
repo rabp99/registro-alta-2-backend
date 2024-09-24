@@ -468,6 +468,14 @@ $routes->scope('/api', function (RouteBuilder $builder) {
                 'action' => 'getProductRequestRecordsFile',
                 'method' => 'GET'
             ],
+            'get-report-range-dates-data/:start_date/:end_date' => [
+                'action' => 'getReportRangeDatesData',
+                'method' => 'GET'
+            ],
+            'get-report-range-dates-file/:start_date/:end_date' => [
+                'action' => 'getReportRangeDatesFile',
+                'method' => 'GET'
+            ],
         ]
     ]);
 

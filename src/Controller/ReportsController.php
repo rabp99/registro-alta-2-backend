@@ -8,7 +8,11 @@ use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Cake\Core\Configure;
+use Cake\I18n\FrozenDate;
 
 /**
  * Reports Controller
@@ -325,6 +329,274 @@ class ReportsController extends AppController
         }
 
         $filename = 'Reporte de Registro de Entrega - ' . date('d-m-Y') . '.xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $response = $this->getResponse()->withType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        ob_start();
+        $writer->save('php://output');
+        $excelOutput = ob_get_clean();
+
+        $delayResponsesStatus = Configure::read('DelayResponses.status');
+        if ($delayResponsesStatus) {
+            $delayTime = Configure::read('DelayResponses.time');
+            sleep($delayTime);
+        }
+
+        return $response->withStringBody($excelOutput);
+    }
+
+    /**
+     * Get Report Range Dates Data method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function getReportRangeDatesData()
+    {
+        $this->getRequest()->allowMethod("GET");
+        $this->viewBuilder()->setOption('serialize', true);
+
+        $startDate = $this->getRequest()->getParam("start_date");
+        $endDate = $this->getRequest()->getParam("end_date");
+        $itemsPerPage = $this->request->getQuery('itemsPerPage');
+
+        $this->loadModel('Products');
+        $this->loadModel('ProductRequests');
+
+        $products = $this->Products->findListByStatus(true)->toArray();
+
+        $query = $this->ProductRequests->find();
+
+        $query->select([
+            'ProductRequests.document_type',
+            'ProductRequests.document_number',
+            'attention_date' => $query->func()->date(['ProductRequests.attention_date' => 'identifier']),
+            'handled_by' => 'Users.full_name'
+        ]);
+
+        if (!empty($startDate) && !empty($endDate)) {
+            $query->andWhere(function ($exp, $query) use ($startDate, $endDate) {
+                return $exp->between(
+                    $query->func()->date(['ProductRequests.attention_date' => 'identifier']),
+                    $startDate,
+                    $endDate
+                );
+            });
+        }
+
+        $query->innerJoinWith('Users');
+
+        $query->innerJoinWith('KitsProductRequests', function ($q) {
+            return $q->innerJoinWith('ProductRequestDetails', function ($q) {
+                return $q->innerJoinWith('Products');
+            });
+        });
+
+        $query
+            ->order(['ProductRequests.year' => 'ASC', 'ProductRequests.number' => 'ASC'])
+            ->group(['ProductRequests.year', 'ProductRequests.number']);
+
+        foreach ($products as $productId => $productDescription) {
+            $query->select([
+                "product$productId" => $query->func()->coalesce([
+                    $query->func()->sum(
+                        $query->newExpr()->addCase(
+                            [
+                                $query->newExpr()->eq('ProductRequestDetails.product_id', $productId)
+                            ],
+                            [
+                                $query->newExpr()->add([
+                                    'KitsProductRequests.amount * ProductRequestDetails.amount'
+                                ])
+                            ],
+                            ['integer']
+                        )
+                    ),
+                    0
+                ])
+            ]);
+        }
+
+        $count = $query->count();
+
+        if (!$itemsPerPage) {
+            $itemsPerPage = $count;
+        }
+
+        $records = $this->paginate($query, [
+            'limit' => $itemsPerPage
+        ]);
+
+        $paginate = $this->getRequest()->getAttribute('paging')['ProductRequests'];
+        $pagination = [
+            'totalItems' => $paginate['count'],
+            'itemsPerPage' =>  $paginate['perPage']
+        ];
+
+        $records = $records->map(function ($record) {
+            return  $record->setHidden(['code']);
+        });
+
+        $delayResponsesStatus = Configure::read('DelayResponses.status');
+        if ($delayResponsesStatus) {
+            $delayTime = Configure::read('DelayResponses.time');
+            sleep($delayTime);
+        }
+
+        $this->set(compact('records', 'products', 'pagination', 'count'));
+    }
+
+    /**
+     * Get Report Range Dates File method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function getReportRangeDatesFile()
+    {
+        $this->getRequest()->allowMethod("GET");
+        $this->viewBuilder()->setOption('serialize', true);
+
+        $startDate = $this->getRequest()->getParam("start_date");
+        $endDate = $this->getRequest()->getParam("end_date");
+
+        $this->loadModel('Products');
+        $this->loadModel('ProductRequests');
+
+        $products = $this->Products->findListByStatus(true)->toArray();
+
+        $query = $this->ProductRequests->find();
+
+        $query->select([
+            'ProductRequests.document_type',
+            'ProductRequests.document_number',
+            'attention_date' => $query->func()->date(['ProductRequests.attention_date' => 'identifier']),
+            'handled_by' => 'Users.full_name'
+
+        ]);
+
+        if (!empty($startDate) && !empty($endDate)) {
+            $query->andWhere(function ($exp, $query) use ($startDate, $endDate) {
+                return $exp->between(
+                    $query->func()->date(['ProductRequests.attention_date' => 'identifier']),
+                    $startDate,
+                    $endDate
+                );
+            });
+        }
+
+        $query->innerJoinWith('Users');
+
+        $query->innerJoinWith('KitsProductRequests', function ($q) {
+            return $q->innerJoinWith('ProductRequestDetails', function ($q) {
+                return $q->innerJoinWith('Products');
+            });
+        });
+
+        $query
+            ->order(['ProductRequests.year' => 'ASC', 'ProductRequests.number' => 'ASC'])
+            ->group(['ProductRequests.year', 'ProductRequests.number']);
+
+        foreach ($products as $productId => $productDescription) {
+            $query->select([
+                "product$productId" => $query->func()->coalesce([
+                    $query->func()->sum(
+                        $query->newExpr()->addCase(
+                            [
+                                $query->newExpr()->eq('ProductRequestDetails.product_id', $productId)
+                            ],
+                            [
+                                $query->newExpr()->add([
+                                    'KitsProductRequests.amount * ProductRequestDetails.amount'
+                                ])
+                            ],
+                            ['integer']
+                        )
+                    ),
+                    0
+                ])
+            ]);
+        }
+
+        $count = $query->count();
+        if ($count === 0) {
+            throw new Exception("No es encontraron registros.");
+        }
+        $records = $query->all();
+
+        $spreadsheet = IOFactory::load(RESOURCES . 'report-range-dates.xlsx');
+        $sheet = $spreadsheet->getActiveSheet();
+
+        if (count($products) > 1) {
+            $sheet->insertNewColumnBefore('F', count($products) - 1);
+        }
+
+        $startDateFormatted = FrozenDate::parseDate($startDate, "yyyy-MM-dd")->i18nFormat("dd/MM/yyyy");
+        $endDateFormatted = FrozenDate::parseDate($endDate, "yyyy-MM-dd")->i18nFormat("dd/MM/yyyy");
+
+        $sheet->setCellValue("B3", "ENTREGA DE EPP DEL " . $startDateFormatted . " AL " . $endDateFormatted);
+
+
+        $column = chr(ord("E") + count($products) - 1);
+        $sheet->mergeCells("E8:" . $column . 8);
+        $sheet->fromArray($products, null, "E9");
+
+
+        for ($i = 0; $i < count($products); $i++) {
+            $column = chr(ord("E") + $i);
+            $sheet->mergeCells($column . "9:" . $column . 10);
+            $sheet->getColumnDimension($column)->setWidth(17);
+            $sheet->getStyle($column . 12)
+                ->getFill()
+                ->setFillType(Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setARGB('FFFF00');
+
+            $sheet->getStyle($column . 12)
+                ->getBorders()
+                ->getAllBorders()
+                ->setBorderStyle(Border::BORDER_THIN);
+
+            $sheet->getStyle($column . 12)
+                ->getFont()
+                ->setBold(true);
+
+            $sheet->getStyle($column . 12)
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+            $sheet->getStyle($column . 12)
+                ->getAlignment()
+                ->setVertical(Alignment::VERTICAL_CENTER);
+        }
+
+        if ($count > 1) {
+            $sheet->insertNewRowBefore(12, $count - 1);
+        }
+
+        foreach ($records as $key => $record) {
+            $document = $record->document_type . ": " . $record->document_number;
+            $data = [
+                "RED ASISTENCIAL LA LIBERTAD",
+                $document,
+                $record->handled_by,
+                "HOSPITAL DE ALTA COMPLEJIDAD",
+            ];
+
+            foreach ($products as $productId => $productDescription) {
+                $productColumnValue = 'product' . $productId;
+                $data[] = $record->$productColumnValue;
+            }
+            $data[] = $record->attention_date->format('d/m/Y');
+
+            $sheet->fromArray($data, null, "A" . (11 + $key));
+        }
+
+        for ($i = 0; $i < count($products); $i++) {
+            $column = chr(ord("E") + $i);
+            $finalRow = 11 + $count;
+            $sheet->setCellValue($column . $finalRow, "=SUM(" . $column . "11:" . $column . ($finalRow - 1) . ")");
+        }
+
+        $filename = 'Reporte de Rango de Fechas - ' . date('d-m-Y') . '.xlsx';
         $writer = new Xlsx($spreadsheet);
         $response = $this->getResponse()->withType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
